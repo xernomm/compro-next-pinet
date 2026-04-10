@@ -134,9 +134,7 @@ const Navbar = ({ companyInfo }) => {
                                     className="w-full h-auto object-contain"
                                 />
                             ) : (
-                                <span className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-400 dark:to-primary-600 bg-clip-text text-transparent">
-                                    {companyInfo?.company_name || 'Company'}
-                                </span>
+                                <img src="/logo512.png" alt="Company Logo" className="h-[40px] sm:h-[48px] w-auto object-contain" />
                             )}
                         </div>
 
