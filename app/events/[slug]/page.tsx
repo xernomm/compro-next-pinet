@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, use } from 'react';
-import EventDetail from '@/pages/EventDetail';
+import EventDetail from '@/components/legacy/EventDetail';
 import { companyAPI } from '@/api/apiService';
 
 export default function Event({ params }: { params: Promise<{ slug: string }> }) {

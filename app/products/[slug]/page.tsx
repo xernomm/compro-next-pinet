@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, use } from 'react';
-import ProductDetail from '@/pages/ProductDetail';
+import ProductDetail from '@/components/legacy/ProductDetail';
 import { companyAPI } from '@/api/apiService';
 
 export default function Product({ params }: { params: Promise<{ slug: string }> }) {

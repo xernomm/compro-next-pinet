@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, use } from 'react';
-import CareerDetail from '@/pages/CareerDetail';
+import CareerDetail from '@/components/legacy/CareerDetail';
 import { companyAPI } from '@/api/apiService';
 
 export default function Career({ params }: { params: Promise<{ slug: string }> }) {

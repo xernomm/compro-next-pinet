@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, use } from 'react';
-import NewsDetail from '@/pages/NewsDetail';
+import NewsDetail from '@/components/legacy/NewsDetail';
 import { companyAPI } from '@/api/apiService';
 
 export default function News({ params }: { params: Promise<{ slug: string }> }) {
