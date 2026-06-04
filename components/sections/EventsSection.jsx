@@ -85,11 +85,9 @@ const EventsSection = ({ events }) => {
                     return (
                         <Link key={event.id}
                             href={`/events/${event.slug}`}
-                            className="group block relative overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-2"
+                            className="group block relative overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-2 glass-card glass-highlight"
                             style={{
                                 animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
-                                background: 'var(--color-surface)',
-                                border: '1px solid var(--color-border)',
                             }}
                         >
                             {/* Top accent */}

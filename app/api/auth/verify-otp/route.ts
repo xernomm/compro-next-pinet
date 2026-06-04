@@ -9,6 +9,8 @@ interface OTPPayload {
   purpose: string;
 }
 
+const JWT_SESSION_EXPIRE = '1h'; // 1 hour session
+
 export async function POST(request: NextRequest) {
   await initDB();
   try {
@@ -26,14 +28,14 @@ export async function POST(request: NextRequest) {
       decoded = jwt.verify(tempToken, process.env.JWT_SECRET || 'secret') as OTPPayload;
     } catch (err) {
       return Response.json(
-        { success: false, message: 'Session has expired. Please log in again.' },
+        { success: false, message: 'Session has expired. Please request a new OTP.' },
         { status: 401 }
       );
     }
 
     if (decoded.purpose !== 'otp_verification') {
       return Response.json(
-        { success: false, message: 'Invalid session token purpose.' },
+        { success: false, message: 'Invalid session token.' },
         { status: 400 }
       );
     }
@@ -57,7 +59,7 @@ export async function POST(request: NextRequest) {
     // Verify OTP code and expiration
     if (!user.otp_code || user.otp_code !== otp) {
       return Response.json(
-        { success: false, message: 'The verification code you entered is invalid.' },
+        { success: false, message: 'The verification code is invalid.' },
         { status: 400 }
       );
     }
@@ -70,16 +72,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // OTP is valid! Clear columns and update login timestamp
+    // OTP is valid — clear OTP columns, update last_login
     await user.update({
       otp_code: null,
       otp_expires_at: null,
-      last_login: new Date()
+      last_login: new Date(),
     });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', {
-      expiresIn: process.env.JWT_EXPIRE || '7d',
-    });
+    // Issue JWT session token — 1 hour only
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET || 'secret',
+      { expiresIn: JWT_SESSION_EXPIRE }
+    );
 
     return Response.json({
       success: true,
@@ -91,10 +96,12 @@ export async function POST(request: NextRequest) {
         role: user.role,
       },
       token,
+      expiresIn: JWT_SESSION_EXPIRE,
     });
   } catch (error: any) {
+    console.error('OTP verification error:', error);
     return Response.json(
-      { success: false, message: 'Error verifying OTP', error: error.message },
+      { success: false, message: 'Error verifying OTP.', error: error.message },
       { status: 500 }
     );
   }

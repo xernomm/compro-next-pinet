@@ -220,7 +220,7 @@ const ClientsSection = ({ clients }) => {
                             <div className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(255,45,45,0.1), transparent)' }}></div>
                             <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(0,240,255,0.08), transparent)' }}></div>
 
-                            <div className="relative rounded-xl p-8 md:p-12" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                            <div className="relative rounded-xl p-8 md:p-12 glass-card">
                             <FormatQuoteIcon
                                 sx={{
                                     fontSize: 100,
@@ -234,7 +234,7 @@ const ClientsSection = ({ clients }) => {
                             <div className="relative z-10" key={currentTestimonial}>
                                 <div className="animate-fadeIn">
                                     <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 italic mb-8 leading-relaxed">
-                                        "{clientsWithTestimonials[currentTestimonial].testimonial}"
+                                        &ldquo;{clientsWithTestimonials[currentTestimonial].testimonial}&rdquo;
                                     </p>
 
                                     <div className="flex items-center space-x-4">
@@ -274,8 +274,10 @@ const ClientsSection = ({ clients }) => {
                                             left: { xs: 8, md: -24 },
                                             top: '50%',
                                             transform: 'translateY(-50%)',
-                                            backgroundColor: 'white',
-                                            boxShadow: 3,
+                                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                            backdropFilter: 'blur(12px)',
+                                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                                            color: 'var(--color-text)',
                                             '&:hover': {
                                                 backgroundColor: '#dc2626',
                                                 color: 'white',
@@ -293,8 +295,10 @@ const ClientsSection = ({ clients }) => {
                                             right: { xs: 8, md: -24 },
                                             top: '50%',
                                             transform: 'translateY(-50%)',
-                                            backgroundColor: 'white',
-                                            boxShadow: 3,
+                                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                            backdropFilter: 'blur(12px)',
+                                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                                            color: 'var(--color-text)',
                                             '&:hover': {
                                                 backgroundColor: '#dc2626',
                                                 color: 'white',
@@ -332,8 +336,8 @@ const ClientsSection = ({ clients }) => {
                 </h3>
 
                 {/* Gradient Fade Edges */}
-                <div className="absolute left-0 top-8 bottom-0 w-20 bg-gradient-to-r from-white dark:from-dark-950 to-transparent z-10 pointer-events-none"></div>
-                <div className="absolute right-0 top-8 bottom-0 w-20 bg-gradient-to-l from-white dark:from-dark-950 to-transparent z-10 pointer-events-none"></div>
+                <div className="absolute left-0 top-8 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, var(--color-bg), transparent)' }}></div>
+                <div className="absolute right-0 top-8 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, var(--color-bg), transparent)' }}></div>
 
                 {/* Marquee Container */}
                 <div
@@ -380,12 +384,7 @@ const ClientsSection = ({ clients }) => {
                                         onClick={() => client.website_url && window.open(client.website_url, '_blank')}
                                     >
                                         <div
-                                            className="relative rounded-xl p-8 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden"
-                                            style={{
-                                                background: 'var(--color-surface)',
-                                                border: '1px solid var(--color-border)',
-                                                '--glow-color': config.glow,
-                                            }}
+                                            className="relative rounded-xl p-8 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card"
                                         >
                                             {/* Top gradient bar based on industry type */}
                                             <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>

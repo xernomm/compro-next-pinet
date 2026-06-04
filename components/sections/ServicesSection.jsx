@@ -34,11 +34,9 @@ const ServicesSection = ({ services }) => {
                 {activeServices.map((service, index) => (
                     <Link key={service.id}
                         href={`/services/${service.slug}`}
-                        className="group block relative overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-2"
+                        className="group block relative overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-2 glass-card glass-highlight"
                         style={{
                             animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
                         }}
                     >
                         {/* Top accent line */}
@@ -64,7 +62,7 @@ const ServicesSection = ({ services }) => {
                         {/* Image or Icon Area */}
                         <div className="relative h-48 overflow-hidden"
                             style={{
-                                background: 'linear-gradient(135deg, rgba(255, 45, 45, 0.05), rgba(0, 240, 255, 0.02))',
+                                background: 'linear-gradient(135deg, rgba(255, 45, 45, 0.05), rgba(255, 255, 255, 0.02))',
                             }}
                         >
                             {service.image_url ? (

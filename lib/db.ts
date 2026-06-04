@@ -40,7 +40,7 @@ export async function initDB() {
   if (!dbInitialized) {
     try {
       await sequelize.authenticate();
-      await sequelize.sync({ alter: false });
+      await sequelize.sync({ alter: true });
       dbInitialized = true;
     } catch (error) {
       console.error('DB connection error:', error);

@@ -20,6 +20,7 @@ export const ThemeProvider = ({ children }) => {
         if (savedTheme && savedTheme !== theme) {
             setTheme(savedTheme);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {

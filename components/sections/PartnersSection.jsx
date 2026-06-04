@@ -157,7 +157,7 @@ const PartnersSection = ({ partners }) => {
                             return (
                                 <div
                                     key={type}
-                                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 shadow-sm"
+                                    className="flex items-center gap-2 px-4 py-2 rounded-full glass-card"
                                 >
                                     <div
                                         className={`w-3 h-3 rounded-full bg-gradient-to-br ${config.gradient}`}
@@ -183,8 +183,8 @@ const PartnersSection = ({ partners }) => {
                 {/* Partners Marquee - Scrolling Left */}
                 <div className="relative mb-6">
                     {/* Gradient Fade Edges */}
-                    <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-50 dark:from-dark-900 to-transparent z-10 pointer-events-none"></div>
-                    <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-50 dark:from-dark-900 to-transparent z-10 pointer-events-none"></div>
+                    <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, var(--color-bg-secondary), transparent)' }}></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, var(--color-bg-secondary), transparent)' }}></div>
 
                     <div
                         ref={marqueeRef}
@@ -221,7 +221,7 @@ const PartnersSection = ({ partners }) => {
                                             className="flex-shrink-0 group cursor-pointer"
                                             onClick={() => partner.website_url && window.open(partner.website_url, '_blank')}
                                         >
-                                            <div className="relative rounded-xl p-6 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                                            <div className="relative rounded-xl p-6 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card">
                                                 {/* Top gradient bar based on partnership type */}
                                                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
 
@@ -270,8 +270,8 @@ const PartnersSection = ({ partners }) => {
                 {activePartners.length > 4 && (
                     <div className="relative">
                         {/* Gradient Fade Edges */}
-                        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-50 dark:from-dark-900 to-transparent z-10 pointer-events-none"></div>
-                        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-50 dark:from-dark-900 to-transparent z-10 pointer-events-none"></div>
+                        <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, var(--color-bg-secondary), transparent)' }}></div>
+                        <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, var(--color-bg-secondary), transparent)' }}></div>
 
                         <div
                             className="overflow-hidden"
@@ -307,7 +307,7 @@ const PartnersSection = ({ partners }) => {
                                                 className="flex-shrink-0 group cursor-pointer"
                                                 onClick={() => partner.website_url && window.open(partner.website_url, '_blank')}
                                             >
-                                                <div className="relative rounded-xl p-6 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                                                <div className="relative rounded-xl p-6 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card">
                                                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
 
                                                     {partner.logo_url ? (

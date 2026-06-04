@@ -135,7 +135,7 @@ const ContactSection = ({ companyInfo }) => {
             <p className="mono-label text-center mb-3">{'// Get In Touch'}</p>
             <h2 className="section-title">Contact Us</h2>
             <p className="section-subtitle">
-                Have a question or want to work together? We'd love to hear from you.
+                Have a question or want to work together? We&apos;d love to hear from you.
             </p>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -144,11 +144,7 @@ const ContactSection = ({ companyInfo }) => {
                     {contactCards.map((card, index) => (
                         <div
                             key={index}
-                            className="group relative overflow-hidden rounded-xl p-6 transition-all duration-500 hover:-translate-y-1"
-                            style={{
-                                background: 'var(--color-surface)',
-                                border: '1px solid var(--color-border)',
-                            }}
+                            className="group relative overflow-hidden rounded-xl p-6 transition-all duration-500 hover:-translate-y-1 glass-card glass-highlight"
                         >
                             {/* Accent line */}
                             <div
@@ -192,11 +188,7 @@ const ContactSection = ({ companyInfo }) => {
                 {/* Contact Form */}
                 <div className="lg:col-span-2">
                     <div
-                        className="rounded-xl p-8 relative overflow-hidden"
-                        style={{
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
-                        }}
+                        className="rounded-xl p-8 relative overflow-hidden glass-card"
                     >
                         <h3
                             className="text-2xl font-bold mb-6"
@@ -254,11 +246,7 @@ const ContactSection = ({ companyInfo }) => {
             {/* Map Section */}
             <div className="mt-12">
                 <div
-                    className="rounded-xl p-3 h-96 overflow-hidden relative group"
-                    style={{
-                        background: 'var(--color-surface)',
-                        border: '1px solid var(--color-border)',
-                    }}
+                    className="rounded-xl p-3 h-96 overflow-hidden relative group glass-card"
                 >
                     <iframe
                         title="Google Maps Location"

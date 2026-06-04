@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix = '' }) => {
@@ -44,8 +44,11 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix = '' }) => 
     return (
         <div ref={ref} className="text-5xl md:text-6xl font-bold filter dark:drop-shadow-[0_0_20px_rgba(255,45,45,0.3)]">
             <span 
-                className="text-[var(--color-primary)] dark:bg-gradient-to-br dark:from-[var(--color-primary)] dark:via-[var(--color-primary-light)] dark:to-[var(--color-accent)] dark:bg-clip-text dark:text-transparent inline-block"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                className="inline-block"
+                style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    color: 'var(--color-primary)',
+                }}
             >
                 {prefix}{count.toLocaleString()}{suffix}
             </span>
@@ -54,10 +57,32 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix = '' }) => 
 };
 
 const StatsSection = ({ companyInfo }) => {
+    const sectionRef = useRef(null);
+    const videoRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
     const currentYear = new Date().getFullYear();
     const yearsInBusiness = companyInfo?.established_year
         ? currentYear - companyInfo.established_year
         : 0;
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setIsVisible(true);
+                        if (videoRef.current) videoRef.current.play().catch(() => {});
+                    } else {
+                        if (videoRef.current) videoRef.current.pause();
+                    }
+                });
+            },
+            { threshold: 0.2 }
+        );
+
+        if (sectionRef.current) observer.observe(sectionRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     const stats = [
         {
@@ -110,13 +135,51 @@ const StatsSection = ({ companyInfo }) => {
 
     return (
         <section
+            ref={sectionRef}
             className="py-24 relative overflow-hidden"
             style={{
-                background: 'var(--color-bg-secondary)',
                 borderTop: '1px solid var(--color-border)',
                 borderBottom: '1px solid var(--color-border)',
             }}
         >
+            {/* Video Background */}
+            <video
+                ref={videoRef}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ zIndex: 0 }}
+            >
+                <source src="/videos/matrix.mp4" type="video/mp4" />
+            </video>
+
+            {/* Video overlay — dark in dark mode, light in light mode */}
+            <div
+                className="absolute inset-0"
+                style={{ zIndex: 1 }}
+            >
+                {/* Dark mode overlay */}
+                <div
+                    className="absolute inset-0 hidden dark:block"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(15, 15, 18, 0.8) 0%, rgba(15, 15, 18, 0.7) 50%, rgba(15, 15, 18, 0.8) 100%)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                    }}
+                />
+                {/* Light mode overlay */}
+                <div
+                    className="absolute inset-0 block dark:hidden"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(243, 244, 246, 0.35) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(243, 244, 246, 0.35) 100%)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                    }}
+                />
+            </div>
+
             {/* Grid background */}
             <div
                 className="absolute inset-0 pointer-events-none"
@@ -126,17 +189,18 @@ const StatsSection = ({ companyInfo }) => {
                         linear-gradient(90deg, rgba(255, 45, 45, 0.04) 1px, transparent 1px)
                     `,
                     backgroundSize: '60px 60px',
+                    zIndex: 2,
                 }}
             />
 
             {/* Ambient glow orbs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 2 }}>
                 <div
                     className="absolute w-96 h-96 rounded-full animate-float"
                     style={{
                         top: '-10%',
                         left: '10%',
-                        background: 'radial-gradient(circle, rgba(255, 45, 45, 0.05) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, rgba(255, 45, 45, 0.06) 0%, transparent 70%)',
                     }}
                 />
                 <div
@@ -144,28 +208,37 @@ const StatsSection = ({ companyInfo }) => {
                     style={{
                         bottom: '-10%',
                         right: '10%',
-                        background: 'radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 70%)',
                         animationDelay: '1.5s',
                     }}
                 />
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative" style={{ zIndex: 10 }}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                     {stats.map((stat, index) => (
                         <div
                             key={index}
-                            className="text-center group"
+                            className="text-center group glass-card glass-highlight rounded-xl p-6 md:p-8"
                             style={{
-                                animation: `fadeInUp 0.6s ease-out ${index * 0.15}s both`
+                                animation: isVisible ? `fadeInUp 0.6s ease-out ${index * 0.15}s both` : 'none',
                             }}
                         >
+                            {/* Top accent line */}
+                            <div
+                                className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+                                style={{
+                                    background: 'linear-gradient(90deg, #ff2d2d, #ffffff)',
+                                    zIndex: 3,
+                                }}
+                            />
+
                             {/* Icon */}
                             <div
                                 className="mb-5 mx-auto w-16 h-16 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                                 style={{
                                     color: 'var(--color-primary)',
-                                    background: 'rgba(255, 45, 45, 0.05)',
+                                    background: 'rgba(255, 45, 45, 0.08)',
                                     border: '1px solid rgba(255, 45, 45, 0.15)',
                                 }}
                             >

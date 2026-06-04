@@ -61,8 +61,9 @@ export async function sendOTPEmail(emails: string[], otpCode: string, username: 
     const info = await transporter.sendMail(mailOptions);
     console.log(`[OTP Verification] Email sent successfully to ${emails.join(', ')}. Message ID: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
-  } catch (error: any) {
-    console.error('[OTP Verification] Failed to send SMTP email:', error);
-    return { success: false, error: error.message };
+  } catch (error) {
+    const err = error as Error;
+    console.error('[OTP Verification] Failed to send SMTP email:', err);
+    return { success: false, error: err.message };
   }
 }

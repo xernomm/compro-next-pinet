@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { initDB } from './db';
 
-// @ts-ignore - JS model
+// @ts-expect-error - JS model
 import { User } from './models/index';
 
 interface JWTPayload {
@@ -37,7 +37,7 @@ export async function authenticateRequest(request: NextRequest) {
 
 export function generateToken(id: number) {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'secret', {
-    expiresIn: process.env.JWT_EXPIRE || '7d',
+    expiresIn: process.env.JWT_EXPIRE || '1h',
   });
 }
 

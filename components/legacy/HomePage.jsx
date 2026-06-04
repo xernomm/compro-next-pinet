@@ -124,7 +124,7 @@ const HomePage = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-dark-950">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-cyber-dark">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-4">
                         Oops!

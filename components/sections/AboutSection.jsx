@@ -60,7 +60,7 @@ const AboutSection = ({ companyInfo }) => {
             label: 'Vision',
             icon: <VisibilityIcon />,
             content: companyInfo.vision,
-            accentColor: '#ffffff',
+            accentColor: '#d1d5db',
         },
         {
             id: 'mission',
@@ -159,14 +159,12 @@ const AboutSection = ({ companyInfo }) => {
                                 data-widget={`stat-${stat.id}`}
                                 className={`
                                     relative group overflow-hidden rounded-xl p-6 md:p-8
-                                    transform transition-all duration-500
+                                    transform transition-all duration-500 glass-card glass-highlight
                                     hover:scale-[1.02] hover:-translate-y-1
                                     ${isVisible[`stat-${stat.id}`] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
                                 `}
                                 style={{
                                     transitionDelay: `${index * 100}ms`,
-                                    background: 'var(--color-surface)',
-                                    border: '1px solid var(--color-border)',
                                 }}
                             >
                                 {/* Top accent line */}
@@ -206,12 +204,10 @@ const AboutSection = ({ companyInfo }) => {
                     <div
                         data-widget="tabs"
                         className={`
-                            rounded-xl overflow-hidden mb-14 transition-all duration-700
+                            rounded-xl overflow-hidden mb-14 transition-all duration-700 glass-card
                             ${isVisible['tabs'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
                         `}
                         style={{
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
                         }}
                     >
                         {/* Tab Headers */}
@@ -220,7 +216,7 @@ const AboutSection = ({ companyInfo }) => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(index)}
-                                    className="flex-1 min-w-[120px] px-4 md:px-6 py-4 md:py-5 flex items-center justify-center gap-2 transition-all duration-300 relative"
+                                    className="flex-1 min-w-[120px] px-4 md:px-6 py-4 md:py-5 flex items-center justify-center gap-2 transition-all duration-300 relative hover:bg-black/5 dark:hover:bg-white/5"
                                     style={{
                                         fontFamily: "'Space Grotesk', sans-serif",
                                         fontSize: '0.85rem',
@@ -298,13 +294,11 @@ const AboutSection = ({ companyInfo }) => {
                         <div
                             data-widget="location"
                             className={`
-                                relative overflow-hidden rounded-xl p-6 md:p-8
+                                relative overflow-hidden rounded-xl p-6 md:p-8 glass-card glass-highlight
                                 transform transition-all duration-700
                                 ${isVisible['location'] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}
                             `}
                             style={{
-                                background: 'var(--color-surface)',
-                                border: '1px solid var(--color-border)',
                             }}
                         >
                             <div className="flex items-start gap-4">
@@ -337,14 +331,12 @@ const AboutSection = ({ companyInfo }) => {
                     <div
                         data-widget="contact"
                         className={`
-                            relative overflow-hidden rounded-xl p-6 md:p-8
+                            relative overflow-hidden rounded-xl p-6 md:p-8 glass-card glass-highlight
                             transform transition-all duration-700
                             ${isVisible['contact'] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}
                         `}
                         style={{
                             transitionDelay: '100ms',
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
                         }}
                     >
                         <h3 className="font-bold text-lg mb-6" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

@@ -48,10 +48,42 @@ const Footer = ({ companyInfo }) => {
         <footer
             className="relative overflow-hidden"
             style={{
-                background: 'linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg) 100%)',
                 borderTop: '1px solid var(--color-border)',
             }}
         >
+            {/* Video Background */}
+            <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ zIndex: 0 }}
+            >
+                <source src="/videos/robot.mp4" type="video/mp4" />
+            </video>
+
+            {/* Video overlay — dark/light */}
+            <div className="absolute inset-0" style={{ zIndex: 1 }}>
+                <div
+                    className="absolute inset-0 hidden dark:block"
+                    style={{
+                        background: 'linear-gradient(180deg, rgba(15, 15, 18, 0.8) 0%, rgba(15, 15, 18, 0.7) 50%, rgba(15, 15, 18, 0.85) 100%)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                    }}
+                />
+                <div
+                    className="absolute inset-0 block dark:hidden"
+                    style={{
+                        background: 'linear-gradient(180deg, rgba(243, 244, 246, 0.35) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.3) 100%)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                    }}
+                />
+            </div>
+
             {/* Grid background */}
             <div
                 className="absolute inset-0 pointer-events-none"
@@ -61,15 +93,16 @@ const Footer = ({ companyInfo }) => {
                         linear-gradient(90deg, rgba(255, 45, 45, 0.02) 1px, transparent 1px)
                     `,
                     backgroundSize: '60px 60px',
+                    zIndex: 2,
                 }}
             />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative text-white" style={{ zIndex: 10 }}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* Company Info */}
                     <div className="col-span-1 lg:col-span-2">
                         <h3
-                            className="text-2xl font-bold mb-4 text-gradient"
+                            className="text-2xl font-bold mb-4 text-white"
                             style={{
                                 fontFamily: "'Space Grotesk', sans-serif",
                                 letterSpacing: '0.02em',
@@ -78,7 +111,7 @@ const Footer = ({ companyInfo }) => {
                             {companyInfo?.company_name || 'Company Name'}
                         </h3>
                         {companyInfo?.tagline && (
-                            <p className="mb-6 text-sm" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
+                            <p className="mb-6 text-sm text-white/70" style={{ lineHeight: 1.7 }}>
                                 {companyInfo.tagline}
                             </p>
                         )}
@@ -87,8 +120,8 @@ const Footer = ({ companyInfo }) => {
                         <div className="space-y-3 mb-8">
                             {companyInfo?.address && (
                                 <div className="flex items-start space-x-3">
-                                    <LocationOnIcon sx={{ fontSize: 18, color: 'var(--color-primary)', mt: 0.3 }} />
-                                    <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                                    <LocationOnIcon sx={{ fontSize: 18, color: '#ff2d2d', mt: 0.3 }} />
+                                    <div className="text-sm text-white/70">
                                         <p>{companyInfo.address}</p>
                                         {(companyInfo.city || companyInfo.province || companyInfo.postal_code) && (
                                             <p>
@@ -104,11 +137,12 @@ const Footer = ({ companyInfo }) => {
 
                             {companyInfo?.email && (
                                 <div className="flex items-center space-x-3">
-                                    <EmailIcon sx={{ fontSize: 18, color: 'var(--color-primary)' }} />
+                                    <EmailIcon sx={{ fontSize: 18, color: '#ff2d2d' }} />
                                     <a
                                         href={`mailto:${companyInfo.email}`}
-                                        className="text-sm hover:text-primary-500 transition-colors"
-                                        style={{ color: 'var(--color-text-secondary)' }}
+                                        className="text-sm text-white/70 hover:text-primary-500 transition-all duration-300"
+                                        onMouseEnter={(e) => { e.currentTarget.style.textShadow = '0 0 8px rgba(255, 45, 45, 0.6)'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.textShadow = 'none'; }}
                                     >
                                         {companyInfo.email}
                                     </a>
@@ -120,8 +154,9 @@ const Footer = ({ companyInfo }) => {
                                     <PhoneIcon sx={{ fontSize: 18, color: '#10b981' }} />
                                     <a
                                         href={`tel:${companyInfo.phone}`}
-                                        className="text-sm hover:text-primary-500 transition-colors"
-                                        style={{ color: 'var(--color-text-secondary)' }}
+                                        className="text-sm text-white/70 hover:text-primary-500 transition-all duration-300"
+                                        onMouseEnter={(e) => { e.currentTarget.style.textShadow = '0 0 8px rgba(255, 45, 45, 0.6)'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.textShadow = 'none'; }}
                                     >
                                         {companyInfo.phone}
                                     </a>
@@ -133,12 +168,11 @@ const Footer = ({ companyInfo }) => {
                         {socialLinks.length > 0 && (
                             <div>
                                 <h4
-                                    className="font-semibold mb-3 text-xs"
+                                    className="font-semibold mb-3 text-xs text-white/50"
                                     style={{
                                         fontFamily: "'Space Grotesk', sans-serif",
                                         letterSpacing: '0.1em',
                                         textTransform: 'uppercase',
-                                        color: 'var(--color-text-secondary)',
                                     }}
                                 >
                                     Follow Us
@@ -155,18 +189,18 @@ const Footer = ({ companyInfo }) => {
                                                 aria-label={social.label}
                                                 className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                                                 style={{
-                                                    background: 'rgba(255, 45, 45, 0.08)',
-                                                    color: 'var(--color-primary)',
-                                                    border: '1px solid rgba(255, 45, 45, 0.15)',
+                                                    background: 'rgba(255, 255, 255, 0.08)',
+                                                    color: 'white',
+                                                    border: '1px solid rgba(255, 255, 255, 0.15)',
                                                 }}
                                                 onMouseEnter={(e) => {
                                                     e.currentTarget.style.background = 'var(--color-primary)';
-                                                    e.currentTarget.style.color = 'white';
-                                                    e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 45, 45, 0.3)';
+                                                    e.currentTarget.style.borderColor = 'var(--color-primary)';
+                                                    e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 45, 45, 0.4)';
                                                 }}
                                                 onMouseLeave={(e) => {
-                                                    e.currentTarget.style.background = 'rgba(255, 45, 45, 0.08)';
-                                                    e.currentTarget.style.color = 'var(--color-primary)';
+                                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                                                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
                                                     e.currentTarget.style.boxShadow = 'none';
                                                 }}
                                             >
@@ -182,12 +216,11 @@ const Footer = ({ companyInfo }) => {
                     {/* Quick Links */}
                     <div>
                         <h4
-                            className="font-semibold mb-5 text-xs"
+                            className="font-semibold mb-5 text-xs text-white/50"
                             style={{
                                 fontFamily: "'Space Grotesk', sans-serif",
                                 letterSpacing: '0.1em',
                                 textTransform: 'uppercase',
-                                color: 'var(--color-text-secondary)',
                             }}
                         >
                             Quick Links
@@ -197,10 +230,9 @@ const Footer = ({ companyInfo }) => {
                                 <li key={link.id}>
                                     <button
                                         onClick={() => scrollToSection(link.id)}
-                                        className="text-sm transition-all duration-300 hover:translate-x-1 inline-flex items-center group"
-                                        style={{ color: 'var(--color-text-secondary)' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
+                                        className="text-sm transition-all duration-300 hover:translate-x-1 inline-flex items-center group text-white/70 hover:text-primary-500"
+                                        onMouseEnter={(e) => { e.currentTarget.style.textShadow = '0 0 8px rgba(255, 45, 45, 0.6)'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.textShadow = 'none'; }}
                                     >
                                         <span
                                             className="w-0 group-hover:w-3 h-[1px] mr-0 group-hover:mr-2 transition-all duration-300"
@@ -216,20 +248,19 @@ const Footer = ({ companyInfo }) => {
                     {/* Additional Info */}
                     <div>
                         <h4
-                            className="font-semibold mb-5 text-xs"
+                            className="font-semibold mb-5 text-xs text-white/50"
                             style={{
                                 fontFamily: "'Space Grotesk', sans-serif",
                                 letterSpacing: '0.1em',
                                 textTransform: 'uppercase',
-                                color: 'var(--color-text-secondary)',
                             }}
                         >
                             Company
                         </h4>
-                        <ul className="space-y-3 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                        <ul className="space-y-3 text-sm text-white/70">
                             {companyInfo?.established_year && (
                                 <li>
-                                    Established: <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>
+                                    Established: <span className="font-semibold text-white">
                                         {companyInfo.established_year}
                                     </span>
                                 </li>
@@ -238,6 +269,8 @@ const Footer = ({ companyInfo }) => {
                                 <button
                                     onClick={() => scrollToSection('about')}
                                     className="transition-colors hover:text-primary-500"
+                                    onMouseEnter={(e) => { e.currentTarget.style.textShadow = '0 0 8px rgba(255, 45, 45, 0.6)'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.textShadow = 'none'; }}
                                 >
                                     Our Story
                                 </button>
@@ -246,6 +279,8 @@ const Footer = ({ companyInfo }) => {
                                 <button
                                     onClick={() => scrollToSection('values')}
                                     className="transition-colors hover:text-primary-500"
+                                    onMouseEnter={(e) => { e.currentTarget.style.textShadow = '0 0 8px rgba(255, 45, 45, 0.6)'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.textShadow = 'none'; }}
                                 >
                                     Our Values
                                 </button>
@@ -255,27 +290,25 @@ const Footer = ({ companyInfo }) => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-14 pt-8" style={{ borderTop: '1px solid var(--color-border)' }}>
+                <div className="mt-14 pt-8" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                        <p className="text-xs text-center md:text-left" style={{ color: 'var(--color-text-secondary)' }}>
+                        <p className="text-xs text-center md:text-left text-white/50">
                             © {currentYear} {companyInfo?.company_name || 'Company'}. All rights reserved.
                         </p>
                         <div className="flex space-x-6 text-xs">
                             <button
                                 onClick={() => scrollToSection('contact')}
-                                className="transition-colors"
-                                style={{ color: 'var(--color-text-secondary)' }}
-                                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)'; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
+                                className="transition-colors text-white/50 hover:text-primary-500"
+                                onMouseEnter={(e) => { e.currentTarget.style.textShadow = '0 0 8px rgba(255, 45, 45, 0.6)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.textShadow = 'none'; }}
                             >
                                 Privacy Policy
                             </button>
                             <button
                                 onClick={() => scrollToSection('contact')}
-                                className="transition-colors"
-                                style={{ color: 'var(--color-text-secondary)' }}
-                                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)'; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
+                                className="transition-colors text-white/50 hover:text-primary-500"
+                                onMouseEnter={(e) => { e.currentTarget.style.textShadow = '0 0 8px rgba(255, 45, 45, 0.6)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.textShadow = 'none'; }}
                             >
                                 Terms of Service
                             </button>

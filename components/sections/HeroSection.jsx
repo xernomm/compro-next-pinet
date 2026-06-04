@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { IconButton } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -8,6 +8,7 @@ import { getImageUrl } from '@/utils/imageUtils';
 
 const HeroSection = ({ heroes }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const videoRef = useRef(null);
     const activeHeroes = heroes.filter(hero => hero.is_active);
 
     useEffect(() => {
@@ -40,26 +41,44 @@ const HeroSection = ({ heroes }) => {
     }];
 
     const currentHero = displayHeroes[currentSlide];
+    const hasImage = !!currentHero.image_url;
 
     return (
         <section id="home" className="relative h-screen w-full overflow-hidden">
-            {/* Background Image */}
-            <div
-                className="absolute inset-0 bg-cover bg-center transition-all duration-1000 transform scale-105"
-                style={{
-                    backgroundImage: currentHero.image_url
-                        ? `url(${getImageUrl(currentHero.image_url)})`
-                        : 'linear-gradient(135deg, #0a0a0f 0%, #1a0505 40%, #0a0a0f 100%)',
-                }}
-            >
-                {/* Dramatic gradient overlay */}
+            {/* Video Background — plays when no hero image */}
+            {!hasImage && (
+                <video
+                    ref={videoRef}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ zIndex: 0 }}
+                >
+                    <source src="/videos/motherboard.mp4" type="video/mp4" />
+                </video>
+            )}
+
+            {/* Background Image (when hero has image) */}
+            {hasImage && (
                 <div
-                    className="absolute inset-0"
+                    className="absolute inset-0 bg-cover bg-center transition-all duration-1000 transform scale-105"
                     style={{
-                        background: 'linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0.5) 100%)',
+                        backgroundImage: `url(${getImageUrl(currentHero.image_url)})`,
                     }}
                 />
-            </div>
+            )}
+
+            {/* Dramatic gradient overlay */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    background: 'linear-gradient(135deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 40%, rgba(0,0,0,0.35) 70%, rgba(0,0,0,0.55) 100%)',
+                    zIndex: 1,
+                }}
+            />
 
             {/* Animated grid overlay */}
             <div
@@ -70,10 +89,11 @@ const HeroSection = ({ heroes }) => {
                         linear-gradient(90deg, rgba(255, 45, 45, 0.04) 1px, transparent 1px)
                     `,
                     backgroundSize: '80px 80px',
+                    zIndex: 2,
                 }}
             />
 
-            {/* Accent diagonal line */}
+            {/* Accent diagonal lines */}
             <div
                 className="absolute pointer-events-none hidden md:block"
                 style={{
@@ -83,6 +103,7 @@ const HeroSection = ({ heroes }) => {
                     height: '300px',
                     background: 'linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
                     transform: 'rotate(20deg)',
+                    zIndex: 3,
                 }}
             />
             <div
@@ -94,19 +115,28 @@ const HeroSection = ({ heroes }) => {
                     height: '200px',
                     background: 'linear-gradient(180deg, transparent, rgba(255, 45, 45, 0.3), transparent)',
                     transform: 'rotate(20deg)',
+                    zIndex: 3,
                 }}
             />
 
-            {/* Bottom gradient fade */}
+            {/* Glass orb decoration */}
             <div
-                className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+                className="absolute hidden md:block rounded-full animate-float"
                 style={{
-                    background: 'linear-gradient(to top, var(--color-bg) 0%, transparent 100%)',
+                    top: '15%',
+                    right: '8%',
+                    width: '200px',
+                    height: '200px',
+                    background: 'radial-gradient(circle, rgba(255, 45, 45, 0.08) 0%, transparent 70%)',
+                    filter: 'blur(40px)',
+                    zIndex: 3,
                 }}
             />
+
+
 
             {/* Content */}
-            <div className="relative h-full flex items-center z-10">
+            <div className="relative h-full flex items-center" style={{ zIndex: 10 }}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="max-w-3xl">
                         {currentHero.subtitle && (
@@ -182,7 +212,7 @@ const HeroSection = ({ heroes }) => {
                 </div>
             </div>
 
-            {/* Navigation Arrows */}
+            {/* Navigation Arrows — Glass style */}
             {activeHeroes.length > 1 && (
                 <>
                     <IconButton
@@ -193,14 +223,14 @@ const HeroSection = ({ heroes }) => {
                             top: '50%',
                             transform: 'translateY(-50%)',
                             backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                            backdropFilter: 'blur(10px)',
+                            backdropFilter: 'blur(16px)',
                             color: 'white',
                             border: '1px solid rgba(255, 255, 255, 0.1)',
-                            borderRadius: '8px',
+                            borderRadius: '12px',
                             '&:hover': {
                                 backgroundColor: 'rgba(255, 45, 45, 0.6)',
                                 borderColor: 'rgba(255, 45, 45, 0.8)',
-                                boxShadow: '0 0 20px rgba(255, 45, 45, 0.3)',
+                                boxShadow: '0 0 25px rgba(255, 45, 45, 0.3)',
                             },
                             transition: 'all 0.3s',
                             zIndex: 20,
@@ -216,14 +246,14 @@ const HeroSection = ({ heroes }) => {
                             top: '50%',
                             transform: 'translateY(-50%)',
                             backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                            backdropFilter: 'blur(10px)',
+                            backdropFilter: 'blur(16px)',
                             color: 'white',
                             border: '1px solid rgba(255, 255, 255, 0.1)',
-                            borderRadius: '8px',
+                            borderRadius: '12px',
                             '&:hover': {
                                 backgroundColor: 'rgba(255, 45, 45, 0.6)',
                                 borderColor: 'rgba(255, 45, 45, 0.8)',
-                                boxShadow: '0 0 20px rgba(255, 45, 45, 0.3)',
+                                boxShadow: '0 0 25px rgba(255, 45, 45, 0.3)',
                             },
                             transition: 'all 0.3s',
                             zIndex: 20,
@@ -236,7 +266,7 @@ const HeroSection = ({ heroes }) => {
 
             {/* Slide Indicator — Horizontal Lines */}
             {activeHeroes.length > 1 && (
-                <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+                <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-3" style={{ zIndex: 20 }}>
                     {activeHeroes.map((_, index) => (
                         <button
                             key={index}
