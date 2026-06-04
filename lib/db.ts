@@ -40,7 +40,10 @@ export async function initDB() {
   if (!dbInitialized) {
     try {
       await sequelize.authenticate();
-      await sequelize.sync({ alter: true });
+      // Safe DB synchronization without alter: true by default to prevent index bloat and deadlocks.
+      // Set DB_ALTER=true in .env.local if schema changes need to be applied.
+      const shouldAlter = process.env.DB_ALTER === 'true';
+      await sequelize.sync({ alter: shouldAlter });
       dbInitialized = true;
     } catch (error) {
       console.error('DB connection error:', error);

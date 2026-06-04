@@ -5,7 +5,6 @@ import HeroSection from '@/components/sections/HeroSection';
 import AboutSection from '@/components/sections/AboutSection';
 import ServicesSection from '@/components/sections/ServicesSection';
 import ValuesSection from '@/components/sections/ValuesSection';
-import StatsSection from '@/components/sections/StatsSection';
 import ProductsSection from '@/components/sections/ProductsSection';
 import PartnersSection from '@/components/sections/PartnersSection';
 import ClientsSection from '@/components/sections/ClientsSection';
@@ -148,7 +147,6 @@ const HomePage = () => {
             <main>
                 <HeroSection heroes={data.heroes} />
                 <AboutSection companyInfo={data.companyInfo} />
-                <StatsSection companyInfo={data.companyInfo} />
                 <ServicesSection services={data.services} />
                 <ValuesSection values={data.values} />
                 <ProductsSection products={data.products} />
