@@ -1,10 +1,12 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from 'react';
 import { IconButton, Chip, Tooltip } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import StarIcon from '@mui/icons-material/Star';
-import { getImageUrl } from '../../utils/imageUtils';
+import { getImageUrl } from '@/utils/imageUtils';
 import { GridPlaceholder } from '../PlaceholderCard';
 
 const ClientsSection = ({ clients }) => {
@@ -85,10 +87,10 @@ const ClientsSection = ({ clients }) => {
             glow: 'rgba(139, 92, 246, 0.3)'
         },
         education: {
-            gradient: 'from-cyan-500 to-sky-600',
-            bgLight: 'rgba(6, 182, 212, 0.1)',
-            text: '#06b6d4',
-            glow: 'rgba(6, 182, 212, 0.3)'
+            gradient: 'from-slate-400 to-slate-600',
+            bgLight: 'rgba(148, 163, 184, 0.1)',
+            text: '#94a3b8',
+            glow: 'rgba(148, 163, 184, 0.3)'
         },
         government: {
             gradient: 'from-slate-500 to-gray-600',
@@ -115,7 +117,7 @@ const ClientsSection = ({ clients }) => {
             glow: 'rgba(14, 165, 233, 0.3)'
         },
         transportation: {
-            gradient: 'from-teal-500 to-cyan-600',
+            gradient: 'from-teal-500 to-emerald-600',
             bgLight: 'rgba(20, 184, 166, 0.1)',
             text: '#14b8a6',
             glow: 'rgba(20, 184, 166, 0.3)'
@@ -204,6 +206,7 @@ const ClientsSection = ({ clients }) => {
 
     return (
         <section id="clients" className="section-container overflow-hidden">
+            <p className="mono-label text-center mb-3">{'// Trust & Confidence'}</p>
             <h2 className="section-title">Our Clients</h2>
             <p className="section-subtitle">
                 Trusted by leading organizations across industries
@@ -212,12 +215,12 @@ const ClientsSection = ({ clients }) => {
             {/* Testimonials Carousel - Enhanced */}
             {clientsWithTestimonials.length > 0 && (
                 <div className="mb-16 relative">
-                    <div className="relative max-w-4xl mx-auto">
-                        {/* Decorative gradient orbs */}
-                        <div className="absolute -top-20 -left-20 w-40 h-40 bg-gradient-to-br from-red-500/20 to-rose-500/10 rounded-full blur-3xl"></div>
-                        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-gradient-to-br from-red-500/20 to-rose-500/10 rounded-full blur-3xl"></div>
+                        <div className="relative max-w-4xl mx-auto">
+                            {/* Decorative gradient orbs */}
+                            <div className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(255,45,45,0.1), transparent)' }}></div>
+                            <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(0,240,255,0.08), transparent)' }}></div>
 
-                        <div className="relative bg-white/80 dark:bg-dark-800/80 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-gray-200/50 dark:border-dark-700/50 shadow-xl">
+                            <div className="relative rounded-xl p-8 md:p-12" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
                             <FormatQuoteIcon
                                 sx={{
                                     fontSize: 100,
@@ -377,8 +380,10 @@ const ClientsSection = ({ clients }) => {
                                         onClick={() => client.website_url && window.open(client.website_url, '_blank')}
                                     >
                                         <div
-                                            className="relative bg-white dark:bg-dark-800 rounded-2xl p-8 w-44 h-36 flex flex-col items-center justify-center border border-gray-200 dark:border-dark-700 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 overflow-hidden"
+                                            className="relative rounded-xl p-8 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden"
                                             style={{
+                                                background: 'var(--color-surface)',
+                                                border: '1px solid var(--color-border)',
                                                 '--glow-color': config.glow,
                                             }}
                                         >

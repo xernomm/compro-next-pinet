@@ -73,7 +73,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
 
     if (error || !event) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-dark-950">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100">
                 <div className="text-center">
                     <h1 className="text-6xl font-bold text-primary-600 dark:text-primary-400 mb-4">404</h1>
                     <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">Event not found</p>
@@ -98,26 +98,24 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
         other: 'from-gray-500 to-slate-600',
     };
 
-    const gradientClass = eventTypeColors[event.event_type] || eventTypeColors.other;
-
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-dark-950">
+        <div className="min-h-screen bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
             <Navbar companyInfo={companyInfo} />
 
             {/* Hero Section */}
-            <div className={`relative pt-20 pb-32 bg-gradient-to-br ${gradientClass} overflow-hidden`}>
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute inset-0" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E")`,
-                    }}></div>
-                </div>
+            <div 
+                className="relative pt-24 pb-36 overflow-hidden grid-bg border-b border-gray-200 dark:border-cyber-border transition-colors duration-300"
+                style={{ background: 'var(--color-bg-secondary)' }}
+            >
+                {/* Gradient Orbs */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
                     {/* Back Button */}
                     <Link
                         href="/#events"
-                        className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors group"
+                        className="inline-flex items-center text-gray-600 dark:text-white/80 hover:text-primary-600 dark:hover:text-white mb-8 transition-colors group"
                     >
                         <ArrowBackIcon className="mr-2 group-hover:-translate-x-1 transition-transform" />
                         Back to Events
@@ -125,44 +123,42 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         {/* Event Info */}
-                        <div className="text-white">
+                        <div className="text-gray-900 dark:text-white">
                             {/* Badges */}
                             <div className="flex flex-wrap items-center gap-3 mb-6">
                                 {event.event_type && (
                                     <Chip
                                         label={event.event_type}
                                         sx={{
-                                            backgroundColor: 'rgba(255,255,255,0.2)',
-                                            color: 'white',
+                                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                            color: '#ef4444',
                                             fontWeight: 600,
                                             textTransform: 'capitalize',
-                                            backdropFilter: 'blur(10px)'
                                         }}
                                     />
                                 )}
                                 {event.is_online && (
                                     <Chip
-                                        icon={<VideocamIcon sx={{ color: 'white !important', fontSize: 16 }} />}
+                                        icon={<VideocamIcon sx={{ color: '#ef4444 !important', fontSize: 16 }} />}
                                         label="Online Event"
                                         sx={{
-                                            backgroundColor: 'rgba(255,255,255,0.2)',
-                                            color: 'white',
+                                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                            color: '#ef4444',
                                             fontWeight: 600,
-                                            backdropFilter: 'blur(10px)'
                                         }}
                                     />
                                 )}
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 {event.title}
                             </h1>
 
                             {/* Quick Info */}
-                            <div className="space-y-3 mb-8">
+                            <div className="space-y-4 mb-8">
                                 {event.start_date && (
-                                    <div className="flex items-center gap-3 text-white/90">
-                                        <CalendarTodayIcon />
+                                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                                        <CalendarTodayIcon className="text-primary-500" />
                                         <span className="text-lg">
                                             {formatDate(event.start_date)}
                                             {event.end_date && event.end_date !== event.start_date && (
@@ -172,8 +168,8 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                     </div>
                                 )}
                                 {(event.start_time || event.end_time) && (
-                                    <div className="flex items-center gap-3 text-white/90">
-                                        <AccessTimeIcon />
+                                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                                        <AccessTimeIcon className="text-primary-500" />
                                         <span className="text-lg">
                                             {event.start_time}
                                             {event.end_time && <> - {event.end_time}</>}
@@ -181,8 +177,8 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                     </div>
                                 )}
                                 {!event.is_online && (event.venue || event.location) && (
-                                    <div className="flex items-center gap-3 text-white/90">
-                                        <LocationOnIcon />
+                                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                                        <LocationOnIcon className="text-primary-500" />
                                         <span className="text-lg">{event.venue || event.location}</span>
                                     </div>
                                 )}
@@ -195,7 +191,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                         href={event.registration_url || event.meeting_link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center px-8 py-4 bg-white text-gray-900 font-bold rounded-xl transition-all hover:scale-105 shadow-lg"
+                                        className="inline-flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg border border-primary-600/30"
                                     >
                                         <EventIcon className="mr-2" />
                                         {event.registration_url ? 'Register Now' : 'Join Event'}
@@ -203,7 +199,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                 )}
                                 <Link
                                     href="/#contact"
-                                    className="inline-flex items-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all backdrop-blur-lg border border-white/20"
+                                    className="inline-flex items-center px-8 py-4 bg-gray-200/50 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-gray-900 dark:text-white font-semibold rounded-xl transition-all backdrop-blur-lg border border-gray-300 dark:border-white/20"
                                 >
                                     Contact Organizer
                                 </Link>
@@ -213,7 +209,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                         {/* Event Image */}
                         {allImages.length > 0 && (
                             <div className="relative">
-                                <div className="relative bg-white/10 backdrop-blur-lg rounded-3xl p-4 shadow-2xl">
+                                <div className="relative bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-3xl p-4 shadow-2xl">
                                     <div className="relative aspect-video rounded-2xl overflow-hidden">
                                         <img
                                             src={getImageUrl(allImages[activeImage])}
@@ -229,8 +225,8 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                                     key={idx}
                                                     onClick={() => setActiveImage(idx)}
                                                     className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${activeImage === idx
-                                                        ? 'border-white ring-2 ring-white/50'
-                                                        : 'border-transparent hover:border-white/50'
+                                                        ? 'border-primary-500 ring-2 ring-primary-500/50'
+                                                        : 'border-transparent hover:border-gray-300 dark:hover:border-cyber-border'
                                                         }`}
                                                 >
                                                     <img
@@ -256,7 +252,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                     <div className="lg:col-span-2 space-y-8">
                         {/* Description */}
                         {event.description && (
-                            <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 md:p-10 shadow-xl">
+                            <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100 dark:border-cyber-border">
                                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                                     <div className="w-1 h-8 bg-primary-500 rounded-full mr-4"></div>
                                     About This Event
@@ -270,12 +266,12 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
 
                         {/* Map or Address */}
                         {!event.is_online && event.address && (
-                            <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl">
+                            <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
                                     <LocationOnIcon className="mr-2 text-primary-500" />
                                     Location
                                 </h3>
-                                <div className="bg-gray-100 dark:bg-dark-800 rounded-2xl p-6">
+                                <div className="bg-gray-50 dark:bg-cyber-dark border border-gray-100 dark:border-cyber-border rounded-2xl p-6">
                                     <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                                         {event.venue || event.location}
                                     </p>
@@ -290,13 +286,13 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                     {/* Sidebar */}
                     <div className="space-y-8">
                         {/* Event Details Card */}
-                        <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl sticky top-24">
+                        <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border sticky top-24">
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                                 Event Details
                             </h3>
                             <div className="space-y-4">
                                 {event.start_date && (
-                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                             <CalendarTodayIcon fontSize="small" />
                                             Date
@@ -307,7 +303,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                     </div>
                                 )}
                                 {event.start_time && (
-                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                             <AccessTimeIcon fontSize="small" />
                                             Time
@@ -318,7 +314,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                     </div>
                                 )}
                                 {event.max_participants && (
-                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                             <PeopleIcon fontSize="small" />
                                             Capacity
@@ -336,8 +332,8 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                             size="small"
                                             sx={{
                                                 textTransform: 'capitalize',
-                                                backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                                                color: '#dc2626',
+                                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                color: '#ef4444',
                                                 fontWeight: 600,
                                             }}
                                         />
@@ -348,7 +344,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
 
                         {/* Organizer Contact */}
                         {(event.organizer || event.contact_person || event.contact_email || event.contact_phone) && (
-                            <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl">
+                            <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                                     Contact Information
                                 </h3>
@@ -361,7 +357,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                     )}
                                     {event.contact_person && (
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                                            <div className="w-10 h-10 rounded-full bg-primary-50 dark:bg-primary-950/30 flex items-center justify-center">
                                                 <PersonIcon className="text-primary-600 dark:text-primary-400" fontSize="small" />
                                             </div>
                                             <span className="text-gray-900 dark:text-white">{event.contact_person}</span>
@@ -372,7 +368,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                             href={`mailto:${event.contact_email}`}
                                             className="flex items-center gap-3 group"
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                            <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center">
                                                 <EmailIcon className="text-blue-600 dark:text-blue-400" fontSize="small" />
                                             </div>
                                             <span className="text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
@@ -385,7 +381,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                             href={`tel:${event.contact_phone}`}
                                             className="flex items-center gap-3 group"
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                            <div className="w-10 h-10 rounded-full bg-green-50 dark:bg-green-950/30 flex items-center justify-center">
                                                 <PhoneIcon className="text-green-600 dark:text-green-400" fontSize="small" />
                                             </div>
                                             <span className="text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
@@ -402,7 +398,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                 {/* Related Events */}
                 {relatedEvents.length > 0 && (
                     <div className="mt-20">
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             Other Upcoming Events
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -410,9 +406,9 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                 <Link
                                     key={relEvent.id}
                                     href={`/events/${relEvent.slug}`}
-                                    className="group bg-white dark:bg-dark-900 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2"
+                                    className="group bg-white dark:bg-cyber-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-cyber-border"
                                 >
-                                    <div className="h-48 overflow-hidden">
+                                    <div className="h-48 overflow-hidden relative">
                                         {relEvent.featured_image ? (
                                             <img
                                                 src={getImageUrl(relEvent.featured_image)}
@@ -420,8 +416,8 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                         ) : (
-                                            <div className={`w-full h-full bg-gradient-to-br ${eventTypeColors[relEvent.event_type] || eventTypeColors.other} flex items-center justify-center`}>
-                                                <EventIcon sx={{ fontSize: 64, color: 'rgba(255,255,255,0.3)' }} />
+                                            <div className="w-full h-full bg-gradient-to-br from-primary-50 to-primary-100 dark:from-cyber-darker dark:to-cyber-surface flex items-center justify-center border-b border-gray-100 dark:border-cyber-border">
+                                                <EventIcon sx={{ fontSize: 64, color: 'rgba(239, 68, 68, 0.3)' }} />
                                             </div>
                                         )}
                                     </div>

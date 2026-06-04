@@ -52,6 +52,8 @@ export async function POST(request: NextRequest) {
     if (typeof data.is_featured === 'string') data.is_featured = data.is_featured === 'true';
     const imagePath = await handleFileUpload(formData, 'image');
     if (imagePath) data.image_url = imagePath;
+    const videoPath = await handleFileUpload(formData, 'video');
+    if (videoPath) data.video_url = videoPath;
     const galleryPaths = await handleMultipleFileUpload(formData, 'gallery');
     if (galleryPaths.length) data.gallery = JSON.stringify(galleryPaths);
     ['features', 'benefits', 'specifications'].forEach(field => {

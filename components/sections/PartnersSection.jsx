@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, useRef } from 'react';
 import { Tooltip, Chip } from '@mui/material';
-import { getImageUrl } from '../../utils/imageUtils';
+import { getImageUrl } from '@/utils/imageUtils';
 import { GridPlaceholder } from '../PlaceholderCard';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
@@ -44,9 +46,9 @@ const PartnersSection = ({ partners }) => {
             text: '#f59e0b'
         },
         integration: {
-            gradient: 'from-cyan-500 to-sky-600',
-            bgLight: 'rgba(6, 182, 212, 0.1)',
-            text: '#06b6d4'
+            gradient: 'from-slate-400 to-slate-600',
+            bgLight: 'rgba(148, 163, 184, 0.1)',
+            text: '#94a3b8'
         },
         reseller: {
             gradient: 'from-rose-500 to-pink-600',
@@ -134,17 +136,12 @@ const PartnersSection = ({ partners }) => {
     }, {});
 
     return (
-        <section id="partners" className="section-container bg-gray-50 dark:bg-dark-900 overflow-hidden relative">
-            {/* Background Decorations */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10">
+        <section id="partners" className="py-20 md:py-28 overflow-hidden relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-12">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 text-white mb-6 shadow-lg">
-                        <HandshakeIcon sx={{ fontSize: 32 }} />
+                    <p className="mono-label mb-3">{'// Partnerships'}</p>
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl text-white mb-5" style={{ background: 'linear-gradient(135deg, #ff2d2d, #c80d0d)' }}>
+                        <HandshakeIcon sx={{ fontSize: 28 }} />
                     </div>
                     <h2 className="section-title">Our Partners</h2>
                     <p className="section-subtitle">
@@ -224,7 +221,7 @@ const PartnersSection = ({ partners }) => {
                                             className="flex-shrink-0 group cursor-pointer"
                                             onClick={() => partner.website_url && window.open(partner.website_url, '_blank')}
                                         >
-                                            <div className="relative bg-white dark:bg-dark-800 rounded-2xl p-6 w-44 h-36 flex flex-col items-center justify-center border border-gray-200 dark:border-dark-700 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 overflow-hidden">
+                                            <div className="relative rounded-xl p-6 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
                                                 {/* Top gradient bar based on partnership type */}
                                                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
 
@@ -310,7 +307,7 @@ const PartnersSection = ({ partners }) => {
                                                 className="flex-shrink-0 group cursor-pointer"
                                                 onClick={() => partner.website_url && window.open(partner.website_url, '_blank')}
                                             >
-                                                <div className="relative bg-white dark:bg-dark-800 rounded-2xl p-6 w-44 h-36 flex flex-col items-center justify-center border border-gray-200 dark:border-dark-700 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 overflow-hidden">
+                                                <div className="relative rounded-xl p-6 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
                                                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
 
                                                     {partner.logo_url ? (
@@ -354,6 +351,7 @@ const PartnersSection = ({ partners }) => {
                     </div>
                 )}
             </div>
+            {/* </div> */}
 
             {/* CSS for marquee animations */}
             <style>{`

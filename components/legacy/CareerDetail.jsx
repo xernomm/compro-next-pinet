@@ -81,7 +81,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
 
     if (error || !career) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-dark-950">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100">
                 <div className="text-center">
                     <h1 className="text-6xl font-bold text-primary-600 dark:text-primary-400 mb-4">404</h1>
                     <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">Job position not found</p>
@@ -99,28 +99,23 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
     const benefits = parseJSON(career.benefits, []);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-dark-950">
+        <div className="min-h-screen bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
             <Navbar companyInfo={companyInfo} />
 
             {/* Hero Section */}
-            <div className="relative pt-20 pb-32 bg-gradient-to-br from-gray-900 via-gray-800 to-primary-900 overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute inset-0" style={{
-                        backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-                        backgroundSize: '30px 30px'
-                    }}></div>
-                </div>
-
+            <div 
+                className="relative pt-24 pb-36 overflow-hidden grid-bg border-b border-gray-200 dark:border-cyber-border transition-colors duration-300"
+                style={{ background: 'var(--color-bg-secondary)' }}
+            >
                 {/* Gradient Orbs */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-600/20 rounded-full blur-3xl"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
                     {/* Back Button */}
                     <Link
                         href="/#careers"
-                        className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors group"
+                        className="inline-flex items-center text-gray-600 dark:text-white/80 hover:text-primary-600 dark:hover:text-white mb-8 transition-colors group"
                     >
                         <ArrowBackIcon className="mr-2 group-hover:-translate-x-1 transition-transform" />
                         Back to Careers
@@ -133,7 +128,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                                 <Chip
                                     label="Featured Position"
                                     sx={{
-                                        backgroundColor: 'rgba(251, 191, 36, 0.2)',
+                                        backgroundColor: 'rgba(251, 191, 36, 0.1)',
                                         color: '#fbbf24',
                                         fontWeight: 600,
                                     }}
@@ -141,47 +136,47 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                             )}
                             {career.department && (
                                 <Chip
-                                    icon={<WorkIcon sx={{ color: 'white !important', fontSize: 16 }} />}
+                                    icon={<WorkIcon sx={{ color: '#ef4444 !important', fontSize: 16 }} />}
                                     label={career.department}
                                     sx={{
-                                        backgroundColor: 'rgba(255,255,255,0.15)',
-                                        color: 'white',
+                                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                        color: '#ef4444',
                                         fontWeight: 600,
                                     }}
                                 />
                             )}
                         </div>
 
-                        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             {career.job_title}
                         </h1>
 
                         {/* Quick Info */}
-                        <div className="flex flex-wrap gap-6 mb-8 text-white/90">
+                        <div className="flex flex-wrap gap-6 mb-8 text-gray-600 dark:text-gray-300">
                             {career.location && (
                                 <div className="flex items-center gap-2">
-                                    <LocationOnIcon />
+                                    <LocationOnIcon className="text-primary-500" />
                                     <span>{career.location}</span>
                                 </div>
                             )}
                             {career.employment_type && (
                                 <div className="flex items-center gap-2">
-                                    <AccessTimeIcon />
+                                    <AccessTimeIcon className="text-primary-500" />
                                     <span>{employmentTypeLabels[career.employment_type] || career.employment_type}</span>
                                 </div>
                             )}
                             {career.experience_level && (
                                 <div className="flex items-center gap-2">
-                                    <SchoolIcon />
+                                    <SchoolIcon className="text-primary-500" />
                                     <span>{experienceLevelLabels[career.experience_level] || career.experience_level}</span>
                                 </div>
                             )}
                         </div>
 
                         {career.salary_range && (
-                            <div className="inline-block bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-4 mb-8">
-                                <span className="text-white/60 text-sm">Salary Range</span>
-                                <div className="text-2xl font-bold text-primary-400">
+                            <div className="inline-block bg-gray-100 dark:bg-cyber-surface border border-gray-200 dark:border-cyber-border rounded-2xl px-6 py-4 mb-8">
+                                <span className="text-gray-500 dark:text-gray-400 text-sm">Salary Range</span>
+                                <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                                     {career.salary_range}
                                 </div>
                             </div>
@@ -194,7 +189,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                                     href={career.application_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg"
+                                    className="inline-flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg border border-primary-600/30"
                                 >
                                     <SendIcon className="mr-2" />
                                     Apply Now
@@ -202,7 +197,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                             ) : career.contact_email && (
                                 <a
                                     href={`mailto:${career.contact_email}?subject=Application for ${career.job_title}`}
-                                    className="inline-flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg"
+                                    className="inline-flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg border border-primary-600/30"
                                 >
                                     <SendIcon className="mr-2" />
                                     Apply via Email
@@ -210,7 +205,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                             )}
                             <Link
                                 href="/#contact"
-                                className="inline-flex items-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all backdrop-blur-lg border border-white/20"
+                                className="inline-flex items-center px-8 py-4 bg-gray-200/50 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-gray-900 dark:text-white font-semibold rounded-xl transition-all backdrop-blur-lg border border-gray-300 dark:border-white/20"
                             >
                                 Ask Questions
                             </Link>
@@ -226,7 +221,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                     <div className="lg:col-span-2 space-y-8">
                         {/* Description */}
                         {career.description && (
-                            <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 md:p-10 shadow-xl">
+                            <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100 dark:border-cyber-border">
                                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                                     <div className="w-1 h-8 bg-primary-500 rounded-full mr-4"></div>
                                     About This Role
@@ -240,7 +235,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
 
                         {/* Responsibilities */}
                         {responsibilities.length > 0 && (
-                            <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 md:p-10 shadow-xl">
+                            <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100 dark:border-cyber-border">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                                     <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center mr-3">
                                         <WorkIcon className="text-blue-500" />
@@ -261,7 +256,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                         {/* Requirements & Qualifications */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {requirements.length > 0 && (
-                                <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl">
+                                <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border">
                                     <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                                         <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center mr-3">
                                             <AccessTimeIcon className="text-amber-500" />
@@ -280,7 +275,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                             )}
 
                             {qualifications.length > 0 && (
-                                <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl">
+                                <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border">
                                     <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                                         <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mr-3">
                                             <SchoolIcon className="text-purple-500" />
@@ -301,15 +296,15 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
 
                         {/* Benefits */}
                         {benefits.length > 0 && (
-                            <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 md:p-10 text-white">
+                            <div className="bg-gradient-to-br from-emerald-600 to-teal-700 dark:from-cyber-surface dark:to-cyber-darker rounded-3xl p-8 md:p-10 text-white border border-emerald-500/30 dark:border-cyber-border relative overflow-hidden grid-bg shadow-xl">
                                 <h3 className="text-2xl font-bold mb-6 flex items-center">
-                                    <CardGiftcardIcon className="mr-3" sx={{ fontSize: 32 }} />
+                                    <CardGiftcardIcon className="mr-3 text-emerald-300 dark:text-primary-400" sx={{ fontSize: 32 }} />
                                     What We Offer
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {benefits.map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3">
-                                            <CheckCircleIcon fontSize="small" />
+                                        <div key={idx} className="flex items-center gap-3 bg-white/15 dark:bg-white/5 rounded-xl px-4 py-3 border border-white/10 dark:border-white/5">
+                                            <CheckCircleIcon fontSize="small" className="text-emerald-300 dark:text-primary-400" />
                                             <span>{item}</span>
                                         </div>
                                     ))}
@@ -321,13 +316,13 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                     {/* Sidebar */}
                     <div className="space-y-8">
                         {/* Job Details Card */}
-                        <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl sticky top-24">
+                        <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border sticky top-24">
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                                 Job Details
                             </h3>
                             <div className="space-y-4">
                                 {career.department && (
-                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                             <WorkIcon fontSize="small" />
                                             Department
@@ -338,7 +333,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                                     </div>
                                 )}
                                 {career.employment_type && (
-                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                             <AccessTimeIcon fontSize="small" />
                                             Type
@@ -347,15 +342,15 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                                             label={employmentTypeLabels[career.employment_type]}
                                             size="small"
                                             sx={{
-                                                backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                                                color: '#dc2626',
+                                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                color: '#ef4444',
                                                 fontWeight: 600,
                                             }}
                                         />
                                     </div>
                                 )}
                                 {career.experience_level && (
-                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                             <SchoolIcon fontSize="small" />
                                             Level
@@ -366,7 +361,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                                     </div>
                                 )}
                                 {career.location && (
-                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                             <LocationOnIcon fontSize="small" />
                                             Location
@@ -412,7 +407,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                         </div>
 
                         {/* Share Card */}
-                        <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl text-center">
+                        <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border text-center">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
                                 Know Someone Perfect?
                             </h3>
@@ -432,7 +427,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                 {/* Related Jobs */}
                 {relatedJobs.length > 0 && (
                     <div className="mt-20">
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             Similar Positions
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -440,7 +435,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                                 <Link
                                     key={job.id}
                                     href={`/careers/${job.slug}`}
-                                    className="group bg-white dark:bg-dark-900 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2"
+                                    className="group bg-white dark:bg-cyber-surface rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-cyber-border"
                                 >
                                     <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-3">
                                         {job.job_title}
@@ -463,7 +458,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                                         <Chip
                                             label={employmentTypeLabels[job.employment_type]}
                                             size="small"
-                                            sx={{ mt: 3, backgroundColor: 'rgba(220, 38, 38, 0.1)', color: '#dc2626', fontWeight: 600 }}
+                                            sx={{ mt: 3, backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', fontWeight: 600 }}
                                         />
                                     )}
                                 </Link>

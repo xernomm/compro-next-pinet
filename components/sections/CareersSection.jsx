@@ -1,6 +1,7 @@
+"use client";
+
 import React, { useState } from 'react';
 import Link from 'next/link';
-
 import { Chip } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import WorkIcon from '@mui/icons-material/Work';
@@ -64,7 +65,9 @@ const CareersSection = ({ careers }) => {
     };
 
     return (
-        <section id="careers" className="section-container bg-gray-50 dark:bg-dark-900">
+        <section id="careers" className="py-20 md:py-28 relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <p className="mono-label text-center mb-3">{'// Careers'}</p>
             <h2 className="section-title">Join Our Team</h2>
             <p className="section-subtitle">
                 Explore exciting career opportunities and grow with us
@@ -77,10 +80,20 @@ const CareersSection = ({ careers }) => {
                         <button
                             key={dept}
                             onClick={() => setSelectedDepartment(dept)}
-                            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${selectedDepartment === dept
-                                ? 'bg-primary-600 text-white shadow-red-glow'
-                                : 'bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20'
-                                }`}
+                            className={`px-6 py-2 font-medium transition-all duration-300`}
+                            style={{
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                fontSize: '0.8rem',
+                                letterSpacing: '0.06em',
+                                textTransform: 'uppercase',
+                                borderRadius: '6px',
+                                background: selectedDepartment === dept
+                                    ? 'linear-gradient(135deg, #ed1515, #ff2d2d)'
+                                    : 'var(--color-surface)',
+                                color: selectedDepartment === dept ? 'white' : 'var(--color-text-secondary)',
+                                border: selectedDepartment === dept ? 'none' : '1px solid var(--color-border)',
+                                boxShadow: selectedDepartment === dept ? '0 0 20px rgba(255, 45, 45, 0.3)' : 'none',
+                            }}
                         >
                             {dept === 'all' ? 'All Departments' : dept}
                         </button>
@@ -91,12 +104,14 @@ const CareersSection = ({ careers }) => {
             {/* Jobs Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {displayJobs.map((job, index) => (
-                    <Link
-                        key={job.id}
+                    <Link key={job.id}
                         href={`/careers/${job.slug}`}
-                        className="card p-6 cursor-pointer group block relative overflow-hidden"
+                        className="group block relative overflow-hidden rounded-xl p-6"
                         style={{
                             animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
+                            background: 'var(--color-surface)',
+                            border: '1px solid var(--color-border)',
+                            transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                         }}
                     >
                         {/* Featured Badge */}
@@ -173,6 +188,7 @@ const CareersSection = ({ careers }) => {
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                     </Link>
                 ))}
+            </div>
             </div>
         </section>
     );

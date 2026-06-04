@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path: segments } = await params;
-  const filePath = path.join(process.cwd(), 'uploads', ...segments);
+  const filePath = path.join(process.cwd(), 'public', 'uploads', ...segments);
 
   if (!fs.existsSync(filePath)) {
     return Response.json({ success: false, message: 'File not found' }, { status: 404 });
@@ -22,6 +22,11 @@ export async function GET(
     '.pdf': 'application/pdf',
     '.doc': 'application/msword',
     '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.mp4': 'video/mp4',
+    '.mov': 'video/quicktime',
+    '.mkv': 'video/x-matroska',
+    '.avi': 'video/x-msvideo',
+    '.webm': 'video/webm',
   };
 
   const contentType = mimeTypes[ext] || 'application/octet-stream';

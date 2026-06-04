@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import BusinessIcon from '@mui/icons-material/Business';
 import HistoryIcon from '@mui/icons-material/History';
@@ -44,28 +46,28 @@ const AboutSection = ({ companyInfo }) => {
             label: 'About Us',
             icon: <BusinessIcon />,
             content: companyInfo.about,
-            color: 'from-red-500 to-rose-600',
+            accentColor: '#ff2d2d',
         },
         {
             id: 'history',
             label: 'History',
             icon: <HistoryIcon />,
             content: companyInfo.history,
-            color: 'from-amber-500 to-orange-600',
+            accentColor: '#f59e0b',
         },
         {
             id: 'vision',
             label: 'Vision',
             icon: <VisibilityIcon />,
             content: companyInfo.vision,
-            color: 'from-blue-500 to-indigo-600',
+            accentColor: '#ffffff',
         },
         {
             id: 'mission',
             label: 'Mission',
             icon: <TrackChangesIcon />,
             content: companyInfo.mission,
-            color: 'from-emerald-500 to-teal-600',
+            accentColor: '#10b981',
         },
     ].filter(tab => tab.content);
 
@@ -76,7 +78,6 @@ const AboutSection = ({ companyInfo }) => {
             label: 'Years of Excellence',
             suffix: '+',
             icon: <EmojiEventsIcon sx={{ fontSize: 28 }} />,
-            gradient: 'from-red-500 to-rose-600',
         },
         {
             id: 'established',
@@ -84,7 +85,6 @@ const AboutSection = ({ companyInfo }) => {
             label: 'Established',
             prefix: 'Est. ',
             icon: <GroupsIcon sx={{ fontSize: 28 }} />,
-            gradient: 'from-orange-500 to-amber-600',
         },
         {
             id: 'commitment',
@@ -92,7 +92,6 @@ const AboutSection = ({ companyInfo }) => {
             label: 'Commitment',
             suffix: '%',
             icon: <HandshakeIcon sx={{ fontSize: 28 }} />,
-            gradient: 'from-emerald-500 to-teal-600',
         },
     ].filter(stat => stat.value !== null);
 
@@ -138,57 +137,61 @@ const AboutSection = ({ companyInfo }) => {
     };
 
     return (
-        <section id="about" className="section-container bg-gray-50 dark:bg-dark-900 relative overflow-hidden" ref={sectionRef}>
-            {/* Background Decorations */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-red-500/10 to-rose-500/5 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10">
+        <section id="about" className="py-20 md:py-28 relative overflow-hidden grid-bg" ref={sectionRef}
+            style={{ background: 'var(--color-bg-secondary)' }}
+        >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Header */}
-                <div className="text-center">
-                    <h2 style={{ height: "60px" }} className="section-title m-0">About {companyInfo.company_name}</h2>
+                <div className="text-center mb-4">
+                    <p className="mono-label mb-3">{'// Who We Are'}</p>
+                    <h2 className="section-title m-0 mb-2">About {companyInfo.company_name}</h2>
                     {companyInfo.tagline && (
-                        <p className="section-subtitle">{companyInfo.tagline}</p>
+                        <p className="section-subtitle mb-12">{companyInfo.tagline}</p>
                     )}
                 </div>
 
                 {/* Stats Row */}
                 {statsData.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-14">
                         {statsData.map((stat, index) => (
                             <div
                                 key={stat.id}
                                 data-widget={`stat-${stat.id}`}
                                 className={`
-                                    relative group overflow-hidden
-                                    bg-white dark:bg-dark-800 rounded-2xl p-6 md:p-8
-                                    border border-gray-200 dark:border-dark-700
+                                    relative group overflow-hidden rounded-xl p-6 md:p-8
                                     transform transition-all duration-500
                                     hover:scale-[1.02] hover:-translate-y-1
                                     ${isVisible[`stat-${stat.id}`] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
                                 `}
-                                style={{ transitionDelay: `${index * 100}ms` }}
+                                style={{
+                                    transitionDelay: `${index * 100}ms`,
+                                    background: 'var(--color-surface)',
+                                    border: '1px solid var(--color-border)',
+                                }}
                             >
+                                {/* Top accent line */}
+                                <div
+                                    className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+                                    style={{ background: 'linear-gradient(90deg, #ff2d2d, #ffffff)' }}
+                                 />
                                 <div className="flex items-center gap-4">
-                                    <div className={`
-                                        flex-shrink-0 w-14 h-14 rounded-xl
-                                        bg-gradient-to-br ${stat.gradient} text-white
-                                        flex items-center justify-center
-                                        shadow-lg
-                                    `}>
+                                    <div className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center"
+                                        style={{
+                                            background: 'linear-gradient(135deg, rgba(255, 45, 45, 0.1), rgba(255, 255, 255, 0.05))',
+                                            color: 'var(--color-primary)',
+                                        }}
+                                    >
                                         {stat.icon}
                                     </div>
                                     <div>
-                                        <div className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                                        <div className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                             <AnimatedCounter
                                                 value={stat.value}
                                                 prefix={stat.prefix || ''}
                                                 suffix={stat.suffix || ''}
                                             />
                                         </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                                             {stat.label}
                                         </div>
                                     </div>
@@ -203,37 +206,47 @@ const AboutSection = ({ companyInfo }) => {
                     <div
                         data-widget="tabs"
                         className={`
-                            bg-white dark:bg-dark-800 rounded-3xl overflow-hidden shadow-xl
-                            border border-gray-200 dark:border-dark-700
-                            mb-12 transition-all duration-700
+                            rounded-xl overflow-hidden mb-14 transition-all duration-700
                             ${isVisible['tabs'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
                         `}
+                        style={{
+                            background: 'var(--color-surface)',
+                            border: '1px solid var(--color-border)',
+                        }}
                     >
                         {/* Tab Headers */}
-                        <div className="flex flex-wrap border-b border-gray-200 dark:border-dark-700">
+                        <div className="flex flex-wrap" style={{ borderBottom: '1px solid var(--color-border)' }}>
                             {tabData.map((tab, index) => (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(index)}
-                                    className={`
-                                        flex-1 min-w-[120px] px-4 md:px-6 py-4 md:py-5
-                                        flex items-center justify-center gap-2
-                                        font-semibold text-sm md:text-base
-                                        transition-all duration-300 relative
-                                        ${activeTab === index
-                                            ? 'text-primary-600 dark:text-primary-400'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                                        }
-                                    `}
+                                    className="flex-1 min-w-[120px] px-4 md:px-6 py-4 md:py-5 flex items-center justify-center gap-2 transition-all duration-300 relative"
+                                    style={{
+                                        fontFamily: "'Space Grotesk', sans-serif",
+                                        fontSize: '0.85rem',
+                                        fontWeight: activeTab === index ? 600 : 400,
+                                        letterSpacing: '0.06em',
+                                        textTransform: 'uppercase',
+                                        color: activeTab === index ? tab.accentColor : 'var(--color-text-secondary)',
+                                    }}
                                 >
-                                    <span className={`transition-transform duration-300 ${activeTab === index ? 'scale-110' : ''}`}>
+                                    <span style={{
+                                        transition: 'transform 0.3s',
+                                        transform: activeTab === index ? 'scale(1.1)' : 'scale(1)',
+                                    }}>
                                         {tab.icon}
                                     </span>
                                     <span className="hidden sm:inline">{tab.label}</span>
 
                                     {/* Active indicator */}
                                     {activeTab === index && (
-                                        <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${tab.color}`}></div>
+                                        <div
+                                            className="absolute bottom-0 left-0 right-0 h-[2px]"
+                                            style={{
+                                                background: tab.accentColor,
+                                                boxShadow: `0 0 10px ${tab.accentColor}40`,
+                                            }}
+                                        />
                                     )}
                                 </button>
                             ))}
@@ -244,26 +257,31 @@ const AboutSection = ({ companyInfo }) => {
                             {tabData.map((tab, index) => (
                                 <div
                                     key={tab.id}
-                                    className={`
-                                        transition-all duration-500
-                                        ${activeTab === index
+                                    className={`transition-all duration-500 ${
+                                        activeTab === index
                                             ? 'opacity-100 translate-x-0'
                                             : 'opacity-0 absolute -translate-x-8 pointer-events-none'
-                                        }
-                                    `}
+                                    }`}
                                 >
                                     {activeTab === index && (
                                         <>
                                             <div className="flex items-center gap-4 mb-6">
-                                                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tab.color} text-white flex items-center justify-center shadow-lg`}>
+                                                <div
+                                                    className="w-12 h-12 rounded-lg flex items-center justify-center text-white shadow-lg"
+                                                    style={{ background: tab.accentColor }}
+                                                >
                                                     {tab.icon}
                                                 </div>
-                                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                                <h3
+                                                    className="text-2xl font-bold"
+                                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                                >
                                                     {tab.label}
                                                 </h3>
                                             </div>
                                             <div
-                                                className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 leading-relaxed"
+                                                className="prose prose-lg dark:prose-invert max-w-none leading-relaxed"
+                                                style={{ color: 'var(--color-text-secondary)' }}
                                                 dangerouslySetInnerHTML={{ __html: tab.content }}
                                             />
                                         </>
@@ -280,22 +298,27 @@ const AboutSection = ({ companyInfo }) => {
                         <div
                             data-widget="location"
                             className={`
-                                relative overflow-hidden rounded-2xl p-6 md:p-8
-                                bg-white dark:bg-dark-800
-                                border border-gray-200 dark:border-dark-700
-                                transform transition-all duration-700 hover:shadow-lg
+                                relative overflow-hidden rounded-xl p-6 md:p-8
+                                transform transition-all duration-700
                                 ${isVisible['location'] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}
                             `}
+                            style={{
+                                background: 'var(--color-surface)',
+                                border: '1px solid var(--color-border)',
+                            }}
                         >
                             <div className="flex items-start gap-4">
-                                <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white shadow-lg">
+                                <div
+                                    className="flex-shrink-0 w-14 h-14 rounded-lg flex items-center justify-center text-white shadow-lg"
+                                    style={{ background: 'linear-gradient(135deg, #ff2d2d, #ed1515)' }}
+                                >
                                     <LocationOnIcon sx={{ fontSize: 28 }} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-3">
+                                    <h3 className="font-bold text-lg mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                         Our Location
                                     </h3>
-                                    <div className="text-gray-600 dark:text-gray-400 space-y-1">
+                                    <div style={{ color: 'var(--color-text-secondary)' }} className="space-y-1">
                                         <p className="font-medium">{companyInfo.address}</p>
                                         {(companyInfo.city || companyInfo.province || companyInfo.postal_code) && (
                                             <p>
@@ -314,15 +337,17 @@ const AboutSection = ({ companyInfo }) => {
                     <div
                         data-widget="contact"
                         className={`
-                            relative overflow-hidden rounded-2xl p-6 md:p-8
-                            bg-white dark:bg-dark-800
-                            border border-gray-200 dark:border-dark-700
-                            transform transition-all duration-700 hover:shadow-lg
+                            relative overflow-hidden rounded-xl p-6 md:p-8
+                            transform transition-all duration-700
                             ${isVisible['contact'] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}
                         `}
-                        style={{ transitionDelay: '100ms' }}
+                        style={{
+                            transitionDelay: '100ms',
+                            background: 'var(--color-surface)',
+                            border: '1px solid var(--color-border)',
+                        }}
                     >
-                        <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-6">
+                        <h3 className="font-bold text-lg mb-6" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             Get In Touch
                         </h3>
                         <div className="space-y-4">
@@ -331,12 +356,15 @@ const AboutSection = ({ companyInfo }) => {
                                     href={`mailto:${companyInfo.email}`}
                                     className="flex items-center gap-4 group"
                                 >
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300">
+                                    <div
+                                        className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300"
+                                        style={{ background: 'linear-gradient(135deg, #ed1515, #c80d0d)' }}
+                                    >
                                         <EmailIcon />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-500">Email</p>
-                                        <p className="text-gray-900 dark:text-gray-100 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                                        <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>Email</p>
+                                        <p className="font-medium group-hover:text-primary-500 transition-colors">
                                             {companyInfo.email}
                                         </p>
                                     </div>
@@ -347,12 +375,15 @@ const AboutSection = ({ companyInfo }) => {
                                     href={`tel:${companyInfo.phone}`}
                                     className="flex items-center gap-4 group"
                                 >
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300">
+                                    <div
+                                        className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300"
+                                        style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
+                                    >
                                         <PhoneIcon />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-500">Phone</p>
-                                        <p className="text-gray-900 dark:text-gray-100 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                                        <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>Phone</p>
+                                        <p className="font-medium group-hover:text-primary-500 transition-colors">
                                             {companyInfo.phone}
                                         </p>
                                     </div>

@@ -59,44 +59,40 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-dark-950">
+        <div className="min-h-screen bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
             <Navbar companyInfo={companyInfo} />
 
             {/* Hero Section */}
-            <div className="relative pt-20 pb-40 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0">
-                    <div className="absolute inset-0 opacity-10" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}></div>
-                </div>
-
+            <div 
+                className="relative pt-24 pb-36 overflow-hidden grid-bg border-b border-gray-200 dark:border-cyber-border transition-colors duration-300"
+                style={{ background: 'var(--color-bg-secondary)' }}
+            >
                 {/* Gradient Orbs */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
                     {/* Back Button */}
                     <Link
                         href="/#services"
-                        className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors group"
+                        className="inline-flex items-center text-gray-600 dark:text-white/80 hover:text-primary-600 dark:hover:text-white mb-8 transition-colors group"
                     >
                         <ArrowBackIcon className="mr-2 group-hover:-translate-x-1 transition-transform" />
                         Back to Services
                     </Link>
 
                     <div className="max-w-4xl">
-                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-lg rounded-full px-4 py-2 mb-6">
-                            <BusinessCenterIcon sx={{ color: 'white', fontSize: 20 }} />
-                            <span className="text-white/90 font-medium">Our Service</span>
+                        <div className="inline-flex items-center gap-2 bg-gray-200/50 dark:bg-white/10 backdrop-blur-lg rounded-full px-4 py-2 mb-6">
+                            <BusinessCenterIcon className="text-primary-600 dark:text-white" sx={{ fontSize: 20 }} />
+                            <span className="text-gray-800 dark:text-white/90 font-medium">Our Service</span>
                         </div>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             {service.name}
                         </h1>
 
                         {service.short_description && (
-                            <p className="text-xl text-white/80 leading-relaxed max-w-3xl">
+                            <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl">
                                 {service.short_description}
                             </p>
                         )}
@@ -111,7 +107,7 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
                     <div className="lg:col-span-2 space-y-8">
                         {/* Featured Image */}
                         {service.image_url && (
-                            <div className="bg-white dark:bg-dark-900 rounded-3xl overflow-hidden shadow-2xl">
+                            <div className="bg-white dark:bg-cyber-surface rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-cyber-border">
                                 <img
                                     src={getImageUrl(service.image_url)}
                                     alt={service.name}
@@ -122,7 +118,7 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
 
                         {/* Description */}
                         {service.description && (
-                            <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 md:p-10 shadow-xl">
+                            <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100 dark:border-cyber-border">
                                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                                     <div className="w-1 h-8 bg-primary-500 rounded-full mr-4"></div>
                                     Service Overview
@@ -135,9 +131,9 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
                         )}
 
                         {/* Why Choose Us */}
-                        <div className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-dark-800 dark:to-dark-900 rounded-3xl p-8 md:p-10 text-white">
-                            <h3 className="text-2xl font-bold mb-8">Why Choose Our {service.name}?</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-gradient-to-br from-gray-950 to-gray-900 dark:from-cyber-surface dark:to-cyber-darker rounded-3xl p-8 md:p-10 text-white border border-gray-200 dark:border-cyber-border relative overflow-hidden grid-bg shadow-xl">
+                            <h3 className="text-2xl font-bold mb-8 relative z-10">Why Choose Our {service.name}?</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                                 {[
                                     { title: 'Expert Team', desc: 'Highly skilled professionals with years of experience' },
                                     { title: 'Quality Assurance', desc: 'Rigorous testing and quality control processes' },
@@ -161,16 +157,16 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
                     {/* Sidebar */}
                     <div className="space-y-8">
                         {/* Quick Info Card */}
-                        <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl">
+                        <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border">
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                                 Service Details
                             </h3>
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                     <span className="text-gray-500 dark:text-gray-400">Category</span>
                                     <Chip label="Professional Service" size="small" color="primary" />
                                 </div>
-                                <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-dark-700">
+                                <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-cyber-border">
                                     <span className="text-gray-500 dark:text-gray-400">Availability</span>
                                     <span className="font-medium text-green-500">Available Now</span>
                                 </div>
@@ -182,7 +178,7 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
                         </div>
 
                         {/* CTA Card */}
-                        <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-3xl p-8 text-white text-center">
+                        <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-3xl p-8 text-white text-center shadow-xl border border-primary-600/30">
                             <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-6">
                                 <BusinessCenterIcon sx={{ fontSize: 32 }} />
                             </div>
@@ -201,7 +197,7 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
                         </div>
 
                         {/* Contact Info */}
-                        <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 shadow-xl">
+                        <div className="bg-white dark:bg-cyber-surface rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-cyber-border">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
                                 Have Questions?
                             </h3>
@@ -241,9 +237,9 @@ const ServiceDetail = ({ companyInfo, currentSlug }) => {
                                 <Link
                                     key={relService.id}
                                     href={`/services/${relService.slug}`}
-                                    className="group bg-white dark:bg-dark-900 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2"
+                                    className="group bg-white dark:bg-cyber-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-cyber-border"
                                 >
-                                    <div className="h-48 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 overflow-hidden">
+                                    <div className="h-48 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 overflow-hidden border-b border-gray-100 dark:border-cyber-border">
                                         {relService.image_url ? (
                                             <img
                                                 src={getImageUrl(relService.image_url)}

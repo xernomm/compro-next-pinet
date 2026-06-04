@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -43,26 +45,50 @@ const Footer = ({ companyInfo }) => {
     ].filter(link => link.url);
 
     return (
-        <footer className="bg-gray-100 dark:bg-dark-900 border-t border-gray-200 dark:border-dark-700">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <footer
+            className="relative overflow-hidden"
+            style={{
+                background: 'linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg) 100%)',
+                borderTop: '1px solid var(--color-border)',
+            }}
+        >
+            {/* Grid background */}
+            <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                    backgroundImage: `
+                        linear-gradient(rgba(255, 45, 45, 0.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 45, 45, 0.02) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '60px 60px',
+                }}
+            />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* Company Info */}
                     <div className="col-span-1 lg:col-span-2">
-                        <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-400 dark:to-primary-600 bg-clip-text text-transparent">
+                        <h3
+                            className="text-2xl font-bold mb-4 text-gradient"
+                            style={{
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                letterSpacing: '0.02em',
+                            }}
+                        >
                             {companyInfo?.company_name || 'Company Name'}
                         </h3>
                         {companyInfo?.tagline && (
-                            <p className="text-gray-600 dark:text-gray-400 mb-4">
+                            <p className="mb-6 text-sm" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
                                 {companyInfo.tagline}
                             </p>
                         )}
 
                         {/* Contact Info */}
-                        <div className="space-y-3 mb-6">
+                        <div className="space-y-3 mb-8">
                             {companyInfo?.address && (
                                 <div className="flex items-start space-x-3">
-                                    <LocationOnIcon className="text-primary-600 dark:text-primary-400 mt-1 flex-shrink-0" />
-                                    <div className="text-gray-700 dark:text-gray-300">
+                                    <LocationOnIcon sx={{ fontSize: 18, color: 'var(--color-primary)', mt: 0.3 }} />
+                                    <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                                         <p>{companyInfo.address}</p>
                                         {(companyInfo.city || companyInfo.province || companyInfo.postal_code) && (
                                             <p>
@@ -78,10 +104,11 @@ const Footer = ({ companyInfo }) => {
 
                             {companyInfo?.email && (
                                 <div className="flex items-center space-x-3">
-                                    <EmailIcon className="text-primary-600 dark:text-primary-400 flex-shrink-0" />
+                                    <EmailIcon sx={{ fontSize: 18, color: 'var(--color-primary)' }} />
                                     <a
                                         href={`mailto:${companyInfo.email}`}
-                                        className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-sm hover:text-primary-500 transition-colors"
+                                        style={{ color: 'var(--color-text-secondary)' }}
                                     >
                                         {companyInfo.email}
                                     </a>
@@ -90,10 +117,11 @@ const Footer = ({ companyInfo }) => {
 
                             {companyInfo?.phone && (
                                 <div className="flex items-center space-x-3">
-                                    <PhoneIcon className="text-primary-600 dark:text-primary-400 flex-shrink-0" />
+                                    <PhoneIcon sx={{ fontSize: 18, color: '#10b981' }} />
                                     <a
                                         href={`tel:${companyInfo.phone}`}
-                                        className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-sm hover:text-primary-500 transition-colors"
+                                        style={{ color: 'var(--color-text-secondary)' }}
                                     >
                                         {companyInfo.phone}
                                     </a>
@@ -104,7 +132,15 @@ const Footer = ({ companyInfo }) => {
                         {/* Social Media */}
                         {socialLinks.length > 0 && (
                             <div>
-                                <h4 className="font-semibold mb-3 text-gray-900 dark:text-gray-100">
+                                <h4
+                                    className="font-semibold mb-3 text-xs"
+                                    style={{
+                                        fontFamily: "'Space Grotesk', sans-serif",
+                                        letterSpacing: '0.1em',
+                                        textTransform: 'uppercase',
+                                        color: 'var(--color-text-secondary)',
+                                    }}
+                                >
                                     Follow Us
                                 </h4>
                                 <div className="flex space-x-3">
@@ -117,7 +153,22 @@ const Footer = ({ companyInfo }) => {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 aria-label={social.label}
-                                                className="w-10 h-10 rounded-full bg-primary-600 dark:bg-primary-500 text-white flex items-center justify-center hover:bg-primary-700 dark:hover:bg-primary-600 transition-all duration-300 hover:scale-110"
+                                                className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                                                style={{
+                                                    background: 'rgba(255, 45, 45, 0.08)',
+                                                    color: 'var(--color-primary)',
+                                                    border: '1px solid rgba(255, 45, 45, 0.15)',
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.background = 'var(--color-primary)';
+                                                    e.currentTarget.style.color = 'white';
+                                                    e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 45, 45, 0.3)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.background = 'rgba(255, 45, 45, 0.08)';
+                                                    e.currentTarget.style.color = 'var(--color-primary)';
+                                                    e.currentTarget.style.boxShadow = 'none';
+                                                }}
                                             >
                                                 <Icon fontSize="small" />
                                             </a>
@@ -130,16 +181,31 @@ const Footer = ({ companyInfo }) => {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                        <h4
+                            className="font-semibold mb-5 text-xs"
+                            style={{
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase',
+                                color: 'var(--color-text-secondary)',
+                            }}
+                        >
                             Quick Links
                         </h4>
-                        <ul className="space-y-2">
+                        <ul className="space-y-3">
                             {quickLinks.map((link) => (
                                 <li key={link.id}>
                                     <button
                                         onClick={() => scrollToSection(link.id)}
-                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-sm transition-all duration-300 hover:translate-x-1 inline-flex items-center group"
+                                        style={{ color: 'var(--color-text-secondary)' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
                                     >
+                                        <span
+                                            className="w-0 group-hover:w-3 h-[1px] mr-0 group-hover:mr-2 transition-all duration-300"
+                                            style={{ background: 'var(--color-primary)' }}
+                                        />
                                         {link.label}
                                     </button>
                                 </li>
@@ -149,13 +215,21 @@ const Footer = ({ companyInfo }) => {
 
                     {/* Additional Info */}
                     <div>
-                        <h4 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                        <h4
+                            className="font-semibold mb-5 text-xs"
+                            style={{
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase',
+                                color: 'var(--color-text-secondary)',
+                            }}
+                        >
                             Company
                         </h4>
-                        <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                        <ul className="space-y-3 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                             {companyInfo?.established_year && (
                                 <li>
-                                    Established: <span className="font-semibold text-primary-600 dark:text-primary-400">
+                                    Established: <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>
                                         {companyInfo.established_year}
                                     </span>
                                 </li>
@@ -163,7 +237,7 @@ const Footer = ({ companyInfo }) => {
                             <li>
                                 <button
                                     onClick={() => scrollToSection('about')}
-                                    className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                    className="transition-colors hover:text-primary-500"
                                 >
                                     Our Story
                                 </button>
@@ -171,7 +245,7 @@ const Footer = ({ companyInfo }) => {
                             <li>
                                 <button
                                     onClick={() => scrollToSection('values')}
-                                    className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                    className="transition-colors hover:text-primary-500"
                                 >
                                     Our Values
                                 </button>
@@ -181,21 +255,27 @@ const Footer = ({ companyInfo }) => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-12 pt-8 border-t border-gray-300 dark:border-dark-700">
+                <div className="mt-14 pt-8" style={{ borderTop: '1px solid var(--color-border)' }}>
                     <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                        <p className="text-gray-600 dark:text-gray-400 text-sm text-center md:text-left">
+                        <p className="text-xs text-center md:text-left" style={{ color: 'var(--color-text-secondary)' }}>
                             © {currentYear} {companyInfo?.company_name || 'Company'}. All rights reserved.
                         </p>
-                        <div className="flex space-x-6 text-sm">
+                        <div className="flex space-x-6 text-xs">
                             <button
                                 onClick={() => scrollToSection('contact')}
-                                className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                className="transition-colors"
+                                style={{ color: 'var(--color-text-secondary)' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
                             >
                                 Privacy Policy
                             </button>
                             <button
                                 onClick={() => scrollToSection('contact')}
-                                className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                className="transition-colors"
+                                style={{ color: 'var(--color-text-secondary)' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
                             >
                                 Terms of Service
                             </button>

@@ -1,8 +1,9 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
-
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { getImageUrl } from '../../utils/imageUtils';
+import { getImageUrl } from '@/utils/imageUtils';
 import { GridPlaceholder } from '../PlaceholderCard';
 
 const ServicesSection = ({ services }) => {
@@ -11,6 +12,7 @@ const ServicesSection = ({ services }) => {
     if (activeServices.length === 0) {
         return (
             <section id="services" className="section-container">
+                <p className="mono-label text-center mb-3">{'// What We Do'}</p>
                 <h2 className="section-title">Our Services</h2>
                 <p className="section-subtitle">
                     Comprehensive solutions tailored to meet your business needs
@@ -22,6 +24,7 @@ const ServicesSection = ({ services }) => {
 
     return (
         <section id="services" className="section-container">
+            <p className="mono-label text-center mb-3">{'// What We Do'}</p>
             <h2 className="section-title">Our Services</h2>
             <p className="section-subtitle">
                 Comprehensive solutions tailored to meet your business needs
@@ -29,16 +32,41 @@ const ServicesSection = ({ services }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {activeServices.map((service, index) => (
-                    <Link
-                        key={service.id}
+                    <Link key={service.id}
                         href={`/services/${service.slug}`}
-                        className="card card-hover-red p-0 cursor-pointer group overflow-hidden block"
+                        className="group block relative overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-2"
                         style={{
                             animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
+                            background: 'var(--color-surface)',
+                            border: '1px solid var(--color-border)',
                         }}
                     >
+                        {/* Top accent line */}
+                        <div
+                            className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-600 origin-left z-10"
+                            style={{ background: 'linear-gradient(90deg, #ff2d2d, #ffffff)' }}
+                        />
+
+                        {/* Index number */}
+                        <div
+                            className="absolute top-4 right-4 z-10 opacity-20 group-hover:opacity-40 transition-opacity duration-300"
+                            style={{
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                fontSize: '3rem',
+                                fontWeight: 700,
+                                lineHeight: 1,
+                                color: 'var(--color-primary)',
+                            }}
+                        >
+                            {String(index + 1).padStart(2, '0')}
+                        </div>
+
                         {/* Image or Icon Area */}
-                        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20">
+                        <div className="relative h-48 overflow-hidden"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(255, 45, 45, 0.05), rgba(0, 240, 255, 0.02))',
+                            }}
+                        >
                             {service.image_url ? (
                                 <img
                                     src={getImageUrl(service.image_url)}
@@ -47,22 +75,42 @@ const ServicesSection = ({ services }) => {
                                 />
                             ) : service.icon ? (
                                 <div className="w-full h-full flex items-center justify-center">
-                                    <i className={`${service.icon} text-6xl text-primary-600 dark:text-primary-400 group-hover:scale-110 transition-transform duration-300`} />
+                                    <i className={`${service.icon} text-6xl group-hover:scale-110 transition-transform duration-300`}
+                                        style={{ color: 'var(--color-primary)' }}
+                                    />
                                 </div>
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <div
+                                        className="w-20 h-20 rounded-xl flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300"
+                                        style={{
+                                            fontFamily: "'Space Grotesk', sans-serif",
+                                            background: 'linear-gradient(135deg, #ff2d2d, #c80d0d)',
+                                        }}
+                                    >
                                         {service.name.charAt(0)}
                                     </div>
                                 </div>
                             )}
 
                             {/* Gradient Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                             {/* Hover CTA */}
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <span className="bg-white/90 dark:bg-dark-800/90 backdrop-blur-sm px-4 py-2 rounded-full text-primary-600 dark:text-primary-400 font-semibold flex items-center gap-2 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <span
+                                    className="backdrop-blur-sm px-5 py-2 font-semibold flex items-center gap-2 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+                                    style={{
+                                        fontFamily: "'Space Grotesk', sans-serif",
+                                        fontSize: '0.8rem',
+                                        letterSpacing: '0.08em',
+                                        textTransform: 'uppercase',
+                                        background: 'rgba(22, 22, 26, 0.8)',
+                                        color: 'var(--color-primary)',
+                                        border: '1px solid rgba(255, 45, 45, 0.3)',
+                                        borderRadius: '6px',
+                                    }}
+                                >
                                     Learn More <ArrowForwardIcon fontSize="small" />
                                 </span>
                             </div>
@@ -70,17 +118,28 @@ const ServicesSection = ({ services }) => {
 
                         {/* Content */}
                         <div className="p-6">
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                            <h3
+                                className="text-xl font-bold mb-3 group-hover:text-primary-500 transition-colors"
+                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                            >
                                 {service.name}
                             </h3>
                             {service.short_description && (
-                                <p className="text-gray-600 dark:text-gray-400 line-clamp-3 mb-4">
+                                <p className="line-clamp-3 mb-4" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
                                     {service.short_description}
                                 </p>
                             )}
-                            <div className="text-primary-600 dark:text-primary-400 font-semibold flex items-center group-hover:translate-x-2 transition-transform">
+                            <div
+                                className="font-semibold flex items-center group-hover:translate-x-2 transition-transform text-sm"
+                                style={{
+                                    fontFamily: "'Space Grotesk', sans-serif",
+                                    letterSpacing: '0.05em',
+                                    textTransform: 'uppercase',
+                                    color: 'var(--color-primary)',
+                                }}
+                            >
                                 Read More
-                                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                             </div>

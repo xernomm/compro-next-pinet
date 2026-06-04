@@ -87,19 +87,29 @@ const CareersPage = () => {
         <>
             <Navbar companyInfo={companyInfo} />
 
-            <main className="pt-20">
+            <main className="pt-20 bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
                 {/* Hero Section */}
-                <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 dark:from-dark-900 dark:via-dark-800 dark:to-dark-900 py-20">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6" style={{ animation: 'slideUp 0.6s ease-out' }}>
+                <section 
+                    className="relative py-24 overflow-hidden grid-bg border-b border-gray-200 dark:border-cyber-border transition-colors duration-300"
+                    style={{ background: 'var(--color-bg-secondary)' }}
+                >
+                    {/* Gradient Orbs */}
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
+
+                    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+                        <h1 
+                            className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6" 
+                            style={{ animation: 'slideUp 0.6s ease-out', fontFamily: "'Space Grotesk', sans-serif" }}
+                        >
                             Join Our Team
                         </h1>
-                        <p className="text-xl text-white/90 max-w-3xl mx-auto" style={{ animation: 'slideUp 0.6s ease-out 0.1s both' }}>
+                        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto" style={{ animation: 'slideUp 0.6s ease-out 0.1s both' }}>
                             Build your career with us and make an impact. Explore exciting opportunities and grow with a team that values innovation.
                         </p>
                         <Link
                             href="/"
-                            className="inline-flex items-center gap-2 mt-8 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-full font-medium transition-all duration-300"
+                            className="inline-flex items-center gap-2 mt-8 px-6 py-3 bg-gray-200/50 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-gray-900 dark:text-white rounded-full font-medium transition-all duration-300 border border-gray-300 dark:border-white/10"
                             style={{ animation: 'slideUp 0.6s ease-out 0.2s both' }}
                         >
                             <ArrowBackIcon fontSize="small" />
@@ -109,7 +119,7 @@ const CareersPage = () => {
                 </section>
 
                 {/* Careers Content */}
-                <section className="section-container bg-gray-50 dark:bg-dark-900">
+                <section className="section-container bg-white dark:bg-cyber-dark py-20">
                     {openJobs.length === 0 ? (
                         <div className="text-center">
                             <h2 className="section-title">No Open Positions</h2>
@@ -127,9 +137,9 @@ const CareersPage = () => {
                                         <button
                                             key={dept}
                                             onClick={() => setSelectedDepartment(dept)}
-                                            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${selectedDepartment === dept
-                                                ? 'bg-primary-600 text-white shadow-red-glow'
-                                                : 'bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20'
+                                            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 border ${selectedDepartment === dept
+                                                ? 'bg-primary-600 border-primary-600 text-white shadow-red-glow'
+                                                : 'bg-white border-gray-200 dark:bg-cyber-surface dark:border-cyber-border text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-950/20'
                                                 }`}
                                         >
                                             {dept === 'all' ? 'All Departments' : dept}
@@ -140,19 +150,19 @@ const CareersPage = () => {
 
                             {/* Stats */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-                                <div className="bg-white dark:bg-dark-800 rounded-2xl p-6 text-center shadow-lg">
+                                <div className="bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-2xl p-6 text-center shadow-lg">
                                     <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{openJobs.length}</div>
                                     <div className="text-gray-600 dark:text-gray-400">Open Positions</div>
                                 </div>
-                                <div className="bg-white dark:bg-dark-800 rounded-2xl p-6 text-center shadow-lg">
+                                <div className="bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-2xl p-6 text-center shadow-lg">
                                     <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{departments.length - 1}</div>
                                     <div className="text-gray-600 dark:text-gray-400">Departments</div>
                                 </div>
-                                <div className="bg-white dark:bg-dark-800 rounded-2xl p-6 text-center shadow-lg">
+                                <div className="bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-2xl p-6 text-center shadow-lg">
                                     <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{featuredJobs.length}</div>
                                     <div className="text-gray-600 dark:text-gray-400">Featured Jobs</div>
                                 </div>
-                                <div className="bg-white dark:bg-dark-800 rounded-2xl p-6 text-center shadow-lg">
+                                <div className="bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-2xl p-6 text-center shadow-lg">
                                     <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">100%</div>
                                     <div className="text-gray-600 dark:text-gray-400">Growth Focused</div>
                                 </div>
@@ -164,7 +174,7 @@ const CareersPage = () => {
                                     <Link
                                         key={job.id}
                                         href={`/careers/${job.slug}`}
-                                        className="card p-6 cursor-pointer group block relative overflow-hidden"
+                                        className="bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-3xl p-6 cursor-pointer group block relative overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1"
                                         style={{
                                             animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
                                         }}
@@ -177,7 +187,10 @@ const CareersPage = () => {
                                             </div>
                                         )}
 
-                                        <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors pr-20">
+                                        <h3 
+                                            className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors pr-20"
+                                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                        >
                                             {job.job_title}
                                         </h3>
 
@@ -210,8 +223,8 @@ const CareersPage = () => {
                                                     label={employmentTypeLabels[job.employment_type] || job.employment_type}
                                                     size="small"
                                                     sx={{
-                                                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                                                        color: '#dc2626',
+                                                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                        color: '#ef4444',
                                                         fontWeight: 600,
                                                     }}
                                                 />
@@ -223,6 +236,7 @@ const CareersPage = () => {
                                                     variant="outlined"
                                                     sx={{
                                                         borderColor: 'rgba(107, 114, 128, 0.3)',
+                                                        color: 'var(--color-text-secondary)',
                                                     }}
                                                 />
                                             )}

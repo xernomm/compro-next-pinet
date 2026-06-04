@@ -62,7 +62,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
 
     if (error || !news) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-dark-950">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100">
                 <div className="text-center">
                     <h1 className="text-6xl font-bold text-primary-600 dark:text-primary-400 mb-4">404</h1>
                     <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">News article not found</p>
@@ -79,7 +79,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
     const tags = news.tags ? news.tags.split(',').map(t => t.trim()) : [];
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-dark-950">
+        <div className="min-h-screen bg-white dark:bg-cyber-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
             <Navbar companyInfo={companyInfo} />
 
             {/* Hero Section */}
@@ -123,7 +123,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
                                 )}
                             </div>
 
-                            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+                            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 {news.title}
                             </h1>
 
@@ -185,7 +185,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
                 )}
 
                 {/* Main Content */}
-                <div className="bg-white dark:bg-dark-900 rounded-3xl p-8 md:p-12 shadow-xl mb-8">
+                <div className="bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-3xl p-8 md:p-12 shadow-xl mb-8">
                     <article
                         className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-primary-600"
                         dangerouslySetInnerHTML={{ __html: news.content }}
@@ -193,7 +193,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
                 </div>
 
                 {/* Tags & Share */}
-                <div className="flex flex-wrap items-center justify-between gap-4 py-6 border-t border-gray-200 dark:border-dark-700">
+                <div className="flex flex-wrap items-center justify-between gap-4 py-6 border-t border-gray-200 dark:border-cyber-border">
                     {tags.length > 0 && (
                         <div className="flex items-center gap-2 flex-wrap">
                             <LocalOfferIcon className="text-gray-400" fontSize="small" />
@@ -203,8 +203,8 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
                                     label={tag}
                                     size="small"
                                     sx={{
-                                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                                        color: '#dc2626',
+                                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                        color: '#ef4444',
                                         fontWeight: 500,
                                     }}
                                 />
@@ -225,7 +225,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
             {/* Related News */}
             {relatedNews.length > 0 && (
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         Related Articles
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -233,7 +233,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
                             <Link
                                 key={item.id}
                                 href={`/news/${item.slug}`}
-                                className="group bg-white dark:bg-dark-900 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2"
+                                className="group bg-white dark:bg-cyber-surface rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-cyber-border"
                             >
                                 <div className="h-48 overflow-hidden">
                                     <img
