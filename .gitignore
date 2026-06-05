@@ -41,5 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 # video assets
-/asset/videos/
-/public/videos/
+# /asset/videos/
+# /public/videos/
