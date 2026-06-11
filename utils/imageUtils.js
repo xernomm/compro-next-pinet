@@ -13,6 +13,14 @@ export const getImageUrl = (imagePath) => {
         return imagePath;
     }
 
+    // Redirect static /uploads/ references to the dynamic API route /api/uploads/
+    let adjustedPath = imagePath;
+    if (imagePath.startsWith('/uploads/')) {
+        adjustedPath = `/api${imagePath}`;
+    } else if (imagePath.startsWith('uploads/')) {
+        adjustedPath = `/api/${imagePath}`;
+    }
+
     // Use explicit backend URL if provided, otherwise derive it from API URL
     let baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     
@@ -25,14 +33,14 @@ export const getImageUrl = (imagePath) => {
     // If no base URL is defined (relative path on the same host)
     if (!baseUrl || baseUrl === '/') {
         // Fallback to absolute relative path
-        const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+        const path = adjustedPath.startsWith('/') ? adjustedPath : `/${adjustedPath}`;
         return path;
     }
 
     // Remove trailing slash from baseUrl
     const cleanedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
     // Ensure imagePath starts with a slash
-    const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    const path = adjustedPath.startsWith('/') ? adjustedPath : `/${adjustedPath}`;
 
     return `${cleanedBaseUrl}${path}`;
 };
