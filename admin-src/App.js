@@ -33,6 +33,8 @@ import EventForm from './pages/Event/EventForm';
 import CareerList from './pages/Career/CareerList';
 import CareerForm from './pages/Career/CareerForm';
 import ContactList from './pages/Contact/ContactList';
+import MilestoneList from './pages/Milestone/MilestoneList';
+import MilestoneForm from './pages/Milestone/MilestoneForm';
 import BackupPage from './pages/Backup/BackupPage';
 
 import './App.css';
@@ -111,6 +113,11 @@ function App() {
 
           {/* Contacts */}
           <Route path="/dashboard/contacts" element={<ProtectedRoute><DashboardLayout><ContactList /></DashboardLayout></ProtectedRoute>} />
+
+          {/* Milestones */}
+          <Route path="/dashboard/milestones" element={<ProtectedRoute><DashboardLayout><MilestoneList /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/milestones/new" element={<ProtectedRoute><DashboardLayout><MilestoneForm /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/milestones/:id/edit" element={<ProtectedRoute><DashboardLayout><MilestoneForm /></DashboardLayout></ProtectedRoute>} />
 
           {/* Backup */}
           <Route path="/dashboard/backup" element={<ProtectedRoute requiredRoles={['super_admin', 'admin']}><DashboardLayout><BackupPage /></DashboardLayout></ProtectedRoute>} />

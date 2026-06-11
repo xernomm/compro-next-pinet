@@ -11,6 +11,7 @@ import Contact from './Contact.js';
 import Hero from './Hero.js';
 import Service from './Service.js';
 import Value from './Value.js';
+import Milestone from './Milestone.js';
 
 
 // Define associations
@@ -41,4 +42,5 @@ export {
   Hero,
   Service,
   Value,
+  Milestone,
 };

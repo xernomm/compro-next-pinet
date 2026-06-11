@@ -26,6 +26,7 @@ const DashboardLayout = ({ children }) => {
     { path: '/dashboard/news', label: 'News', icon: '📰' },
     { path: '/dashboard/events', label: 'Events', icon: '📅' },
     { path: '/dashboard/careers', label: 'Careers', icon: '💼' },
+    { path: '/dashboard/milestones', label: 'Milestones', icon: '🏆' },
     { path: '/dashboard/contacts', label: 'Contacts', icon: '📧' },
     { path: '/dashboard/backup', label: 'System Backup', icon: '💾' },
   ];

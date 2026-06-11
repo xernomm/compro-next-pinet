@@ -161,6 +161,15 @@ export const contactAPI = {
   delete: (id) => api.delete(`/contacts/${id}`),
 };
 
+// Milestone Services
+export const milestoneAPI = {
+  getAll: (params) => api.get('/milestones', { params }),
+  getById: (id) => api.get(`/milestones/${id}`),
+  create: (data) => api.post('/milestones', data, createConfig(data)),
+  update: (id, data) => api.put(`/milestones/${id}`, data, createConfig(data)),
+  delete: (id) => api.delete(`/milestones/${id}`),
+};
+
 export const backupAPI = {
   create: () => api.post('/backup'),
   syncUploads: () => api.post('/backup/uploads'),

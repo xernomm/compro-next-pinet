@@ -28,6 +28,7 @@ import {
     clientAPI,
     newsAPI,
     eventAPI,
+    milestoneAPI,
 } from '@/api/apiService';
 
 const HomePage = () => {
@@ -43,6 +44,7 @@ const HomePage = () => {
         clients: [],
         news: [],
         events: [],
+        milestones: [],
     });
 
     useEffect(() => {
@@ -61,6 +63,7 @@ const HomePage = () => {
                     clientsRes,
                     newsRes,
                     eventsRes,
+                    milestonesRes,
                 ] = await Promise.all([
                     companyAPI.getInfo().catch(() => ({ data: null })),
                     heroAPI.getAll().catch(() => ({ data: [] })),
@@ -71,6 +74,7 @@ const HomePage = () => {
                     clientAPI.getAll().catch(() => ({ data: [] })),
                     newsAPI.getAll().catch(() => ({ data: [] })),
                     eventAPI.getAll().catch(() => ({ data: [] })),
+                    milestoneAPI.getAll({ is_active: true }).catch(() => ({ data: [] })),
                 ]);
 
                 setData({
@@ -83,6 +87,7 @@ const HomePage = () => {
                     clients: Array.isArray(clientsRes.data) ? clientsRes.data : [],
                     news: Array.isArray(newsRes.data) ? newsRes.data : [],
                     events: Array.isArray(eventsRes.data) ? eventsRes.data : [],
+                    milestones: Array.isArray(milestonesRes.data) ? milestonesRes.data : [],
                 });
             } catch (err) {
                 console.error('Error fetching data:', err);
@@ -146,7 +151,7 @@ const HomePage = () => {
 
             <main>
                 <HeroSection heroes={data.heroes} />
-                <AboutSection companyInfo={data.companyInfo} />
+                <AboutSection companyInfo={data.companyInfo} milestones={data.milestones} />
                 <ServicesSection services={data.services} />
                 <ValuesSection values={data.values} />
                 <ProductsSection products={data.products} />
