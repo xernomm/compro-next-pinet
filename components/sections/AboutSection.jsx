@@ -42,14 +42,14 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix = '' }) => 
 
 // ─── Timeline Milestone Card ─────────────────────────────────────────
 const categoryConfig = {
-    founding:    { color: '#f59e0b', label: 'Founding',    icon: '🏛️' },
+    founding: { color: '#f59e0b', label: 'Founding', icon: '🏛️' },
     partnership: { color: '#3b82f6', label: 'Partnership', icon: '🤝' },
     achievement: { color: '#10b981', label: 'Achievement', icon: '🏆' },
-    expansion:   { color: '#8b5cf6', label: 'Expansion',   icon: '🚀' },
-    product:     { color: '#ef4444', label: 'Product',     icon: '📦' },
+    expansion: { color: '#8b5cf6', label: 'Expansion', icon: '🚀' },
+    product: { color: '#ef4444', label: 'Product', icon: '📦' },
 };
 
-const MilestoneCard = ({ milestone, index, isLeft }) => {
+const MilestoneCard = ({ milestone, index }) => {
     const { ref, inView } = useInView({ threshold: 0.15, triggerOnce: true });
     const catConf = categoryConfig[milestone.category] || categoryConfig.achievement;
     const [expanded, setExpanded] = useState(false);
@@ -58,12 +58,12 @@ const MilestoneCard = ({ milestone, index, isLeft }) => {
     return (
         <div
             ref={ref}
-            className={`timeline-milestone ${isLeft ? 'timeline-left' : 'timeline-right'}`}
+            className="timeline-milestone"
             style={{
                 opacity: inView ? 1 : 0,
                 transform: inView
                     ? 'translateX(0) translateY(0)'
-                    : `translateX(${isLeft ? '-60px' : '60px'}) translateY(20px)`,
+                    : 'translateX(40px) translateY(10px)',
                 transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.08}s`,
             }}
         >
@@ -78,19 +78,8 @@ const MilestoneCard = ({ milestone, index, isLeft }) => {
                 }}
             />
 
-            {/* Connector line from node to card */}
-            <div
-                className="timeline-connector"
-                style={{
-                    background: `linear-gradient(${isLeft ? '90deg' : '270deg'}, transparent, ${catConf.color}40)`,
-                    transform: inView ? 'scaleX(1)' : 'scaleX(0)',
-                    transition: `transform 0.5s ease ${index * 0.08 + 0.15}s`,
-                    transformOrigin: isLeft ? 'right' : 'left',
-                }}
-            />
-
             {/* Card */}
-            <div className="timeline-card group">
+            <div className="timeline-card group w-full">
                 {/* Top accent */}
                 <div
                     className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
@@ -205,7 +194,7 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         setIsVisible(true);
-                        if (videoRef.current) videoRef.current.play().catch(() => {});
+                        if (videoRef.current) videoRef.current.play().catch(() => { });
                     } else {
                         if (videoRef.current) videoRef.current.pause();
                     }
@@ -537,13 +526,11 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                                     if (item.type === 'year') {
                                         return <YearMarker key={`year-${item.year}-${i}`} year={item.year} index={item.index} />;
                                     }
-                                    const isLeft = item.index % 2 === 0;
                                     return (
                                         <MilestoneCard
                                             key={item.data.id || `ms-${i}`}
                                             milestone={item.data}
                                             index={item.index}
-                                            isLeft={isLeft}
                                         />
                                     );
                                 })}
@@ -566,14 +553,13 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                             position: relative;
                         }
 
-                        /* ─── Central Spine ─── */
+                        /* ─── Spine on the Side ─── */
                         .timeline-spine {
                             position: absolute;
-                            left: 50%;
+                            left: 0;
                             top: 0;
                             bottom: 0;
                             width: 2px;
-                            transform: translateX(-50%);
                             background: var(--color-border);
                             z-index: 1;
                         }
@@ -591,11 +577,11 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                         /* ─── Year Marker ─── */
                         .timeline-year-marker {
                             display: flex;
-                            justify-content: center;
+                            justify-content: flex-start;
                             align-items: center;
                             position: relative;
                             z-index: 5;
-                            padding: 24px 0 12px 0;
+                            padding: 24px 0 12px 28px;
                         }
                         .timeline-year-badge {
                             display: inline-flex;
@@ -615,55 +601,26 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
 
                         /* ─── Milestone Layout ─── */
                         .timeline-milestone {
-                            display: grid;
-                            grid-template-columns: 1fr auto 1fr;
-                            align-items: start;
+                            display: flex;
+                            align-items: flex-start;
                             gap: 0;
                             position: relative;
                             padding: 16px 0;
                             z-index: 3;
                         }
-                        .timeline-milestone.timeline-left .timeline-card {
-                            grid-column: 1;
-                            grid-row: 1;
-                        }
-                        .timeline-milestone.timeline-left .timeline-node {
-                            grid-column: 2;
-                            grid-row: 1;
-                        }
-                        .timeline-milestone.timeline-left .timeline-connector {
-                            grid-column: 1;
-                            grid-row: 1;
-                            justify-self: end;
-                            display: none;
-                        }
-                        .timeline-milestone.timeline-right .timeline-card {
-                            grid-column: 3;
-                            grid-row: 1;
-                        }
-                        .timeline-milestone.timeline-right .timeline-node {
-                            grid-column: 2;
-                            grid-row: 1;
-                        }
-                        .timeline-milestone.timeline-right .timeline-connector {
-                            grid-column: 3;
-                            grid-row: 1;
-                            justify-self: start;
-                            display: none;
-                        }
 
                         /* ─── Node Dot ─── */
                         .timeline-node {
+                            position: absolute;
+                            left: -7px;
+                            top: 28px;
                             width: 16px;
                             height: 16px;
                             border-radius: 50%;
                             background: var(--node-color, #ff2d2d);
                             border: 3px solid var(--color-bg, #08080a);
                             box-shadow: 0 0 0 2px var(--node-color, #ff2d2d), 0 0 16px var(--node-color, #ff2d2d);
-                            align-self: center;
-                            justify-self: center;
                             z-index: 4;
-                            position: relative;
                         }
 
                         /* ─── Card ─── */
@@ -672,7 +629,8 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                             overflow: hidden;
                             border-radius: 16px;
                             padding: 20px;
-                            margin: 0 16px;
+                            margin-left: 28px;
+                            margin-right: 0;
                             background: rgba(255, 255, 255, 0.03);
                             backdrop-filter: blur(12px);
                             -webkit-backdrop-filter: blur(12px);
@@ -705,12 +663,15 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                         .timeline-end-marker {
                             display: flex;
                             flex-direction: column;
-                            align-items: center;
+                            align-items: flex-start;
+                            padding-left: 0;
                             padding-top: 40px;
                             position: relative;
                             z-index: 5;
                         }
                         .timeline-end-dot {
+                            position: absolute;
+                            left: -5px;
                             width: 12px;
                             height: 12px;
                             border-radius: 50%;
@@ -722,39 +683,6 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                         @keyframes pulse-dot {
                             0%, 100% { box-shadow: 0 0 12px rgba(255, 45, 45, 0.3); transform: scale(1); }
                             50% { box-shadow: 0 0 24px rgba(255, 45, 45, 0.6); transform: scale(1.2); }
-                        }
-
-                        /* ─── Responsive: Tablet ─── */
-                        @media (max-width: 1024px) {
-                            .timeline-spine {
-                                left: 24px;
-                            }
-                            .timeline-milestone {
-                                display: flex;
-                                align-items: flex-start;
-                                gap: 0;
-                                padding-left: 0;
-                            }
-                            .timeline-node {
-                                position: absolute;
-                                left: 17px;
-                                top: 28px;
-                            }
-                            .timeline-card {
-                                margin-left: 56px;
-                                margin-right: 0;
-                            }
-                            .timeline-connector {
-                                display: none !important;
-                            }
-                            .timeline-year-marker {
-                                justify-content: flex-start;
-                                padding-left: 48px;
-                            }
-                            .timeline-end-marker {
-                                align-items: flex-start;
-                                padding-left: 18px;
-                            }
                         }
 
                         /* ─── Responsive: Mobile ─── */
