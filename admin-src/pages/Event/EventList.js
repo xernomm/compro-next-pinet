@@ -72,10 +72,10 @@ const EventList = () => {
                         <tbody>
                             {events.map((event) => (
                                 <tr key={event.id}>
-                                    <td>{event.image_url && <img src={getImageUrl(event.image_url)} alt={event.title} style={{ height: '40px', width: '64px', objectFit: 'cover', borderRadius: '4px' }} />}</td>
+                                    <td>{event.featured_image && <img src={getImageUrl(event.featured_image)} alt={event.title} style={{ height: '40px', width: '64px', objectFit: 'cover', borderRadius: '4px' }} />}</td>
                                     <td><strong>{event.title}</strong></td>
                                     <td>{event.location}</td>
-                                    <td>{event.event_date ? new Date(event.event_date).toLocaleDateString() : '-'}</td>
+                                    <td>{event.start_date ? new Date(event.start_date).toLocaleDateString() : '-'}</td>
                                     <td><span className={`status-badge ${event.status === 'published' ? 'status-active' : 'status-inactive'}`}>{event.status || 'Draft'}</span></td>
                                     <td className="text-right">
                                         <button onClick={() => navigate(`/dashboard/events/${event.id}/edit`)} className="btn btn-sm btn-secondary mr-2">Edit</button>

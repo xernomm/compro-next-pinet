@@ -16,10 +16,10 @@ const EventForm = () => {
         slug: '',
         description: '',
         location: '',
-        event_date: '',
-        event_time: '',
+        start_date: '',
+        start_time: '',
         end_date: '',
-        registration_link: '',
+        registration_url: '',
         is_featured: false,
         status: 'draft',
         meta_title: '',
@@ -40,16 +40,16 @@ const EventForm = () => {
                 slug: event.slug || '',
                 description: event.description || '',
                 location: event.location || '',
-                event_date: event.event_date ? event.event_date.split('T')[0] : '',
-                event_time: event.event_time || '',
+                start_date: event.start_date ? event.start_date.split('T')[0] : '',
+                start_time: event.start_time || '',
                 end_date: event.end_date ? event.end_date.split('T')[0] : '',
-                registration_link: event.registration_link || '',
+                registration_url: event.registration_url || '',
                 is_featured: event.is_featured ?? false,
                 status: event.status || 'draft',
                 meta_title: event.meta_title || '',
                 meta_description: event.meta_description || '',
             });
-            if (event.image_url) setPreviewImage(getImageUrl(event.image_url));
+            if (event.featured_image) setPreviewImage(getImageUrl(event.featured_image));
         } catch (error) {
             console.error('Error fetching event:', error);
             toast.error('Failed to load event');
@@ -79,7 +79,7 @@ const EventForm = () => {
         try {
             const submitData = new FormData();
             Object.keys(formData).forEach(key => submitData.append(key, formData[key]));
-            if (image) submitData.append('image', image);
+            if (image) submitData.append('featured_image', image);
 
             if (isEdit) { await eventAPI.update(id, submitData); toast.success('Event updated successfully'); }
             else { await eventAPI.create(submitData); toast.success('Event created successfully'); }
@@ -114,8 +114,8 @@ const EventForm = () => {
                     <div className="form-section">
                         <h3 className="form-section-title">Date & Time</h3>
                         <div className="form-row three-cols">
-                            <div className="form-group"><label>Event Date</label><input type="date" name="event_date" value={formData.event_date} onChange={handleInputChange} className="form-control" /></div>
-                            <div className="form-group"><label>Event Time</label><input type="text" name="event_time" value={formData.event_time} onChange={handleInputChange} className="form-control" placeholder="e.g., 09:00 AM" /></div>
+                            <div className="form-group"><label>Event Date *</label><input type="date" name="start_date" value={formData.start_date} onChange={handleInputChange} className="form-control" required /></div>
+                            <div className="form-group"><label>Event Time</label><input type="text" name="start_time" value={formData.start_time} onChange={handleInputChange} className="form-control" placeholder="e.g., 09:00 AM" /></div>
                             <div className="form-group"><label>End Date</label><input type="date" name="end_date" value={formData.end_date} onChange={handleInputChange} className="form-control" /></div>
                         </div>
                     </div>
@@ -129,7 +129,7 @@ const EventForm = () => {
                                 <input type="file" accept="image/*" onChange={handleImageChange} className="form-control" />
                             </div>
                         </div>
-                        <div className="form-group"><label>Registration Link</label><input type="url" name="registration_link" value={formData.registration_link} onChange={handleInputChange} className="form-control" /></div>
+                        <div className="form-group"><label>Registration Link</label><input type="url" name="registration_url" value={formData.registration_url} onChange={handleInputChange} className="form-control" /></div>
                     </div>
 
                     <div className="form-section">

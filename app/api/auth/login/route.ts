@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await User.findOne({
+    const user: any = await User.findOne({
       where: { [Op.or]: [{ email }, { username: email }] },
     });
 

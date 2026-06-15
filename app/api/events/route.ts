@@ -49,8 +49,15 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const data: any = {};
     for (const [key, value] of formData.entries()) {
-      if (key !== 'featured_image') data[key] = value;
+      if (key !== 'featured_image' && key !== 'image' && key !== 'gallery') {
+        data[key] = value;
+      }
     }
+    // Map client legacy field names to DB names
+    if (data.event_date && !data.start_date) data.start_date = data.event_date;
+    if (data.event_time && !data.start_time) data.start_time = data.event_time;
+    if (data.registration_link && !data.registration_url) data.registration_url = data.registration_link;
+
     if (!data.event_type || data.event_type === '') data.event_type = 'seminar';
     if (!data.status || data.status === '') data.status = 'upcoming';
     data.max_participants = data.max_participants ? parseInt(data.max_participants, 10) || null : null;
@@ -60,7 +67,7 @@ export async function POST(request: NextRequest) {
     ['start_date', 'end_date', 'start_time', 'end_time'].forEach(f => {
       if (data[f] === '' || data[f] === undefined) data[f] = null;
     });
-    const imgPath = await handleFileUpload(formData, 'featured_image');
+    const imgPath = await handleFileUpload(formData, 'featured_image') || await handleFileUpload(formData, 'image');
     if (imgPath) data.featured_image = imgPath;
     const event = await Event.create(data);
     return Response.json({ success: true, data: event, message: 'Event created successfully' }, { status: 201 });
