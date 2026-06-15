@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import CanvasGridBackground from '@/components/CanvasGridBackground';
 import { useParams, useRouter } from 'next/navigation';
 import { Chip } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -14,6 +15,7 @@ import { format } from 'date-fns';
 import Loading from '@/components/Loading';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ChatWidget from '@/components/ChatWidget';
 
 const NewsDetail = ({ companyInfo, currentSlug }) => {
     const { slug: paramSlug } = useParams();
@@ -85,16 +87,16 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
             {/* Hero Section */}
             <div className="relative pt-20">
                 {/* Featured Image */}
-                <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
-                    {allImages.length > 0 ? (
-                        <img
-                            src={getImageUrl(allImages[activeImage])}
-                            alt={news.title}
-                            className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800"></div>
-                    )}
+                <div className="relative h-[50vh] md:h-[60vh] overflow-hidden bg-gray-900">
+                    <CanvasGridBackground
+                        src={news.featured_image ? getImageUrl(allImages[activeImage] || news.featured_image) : null}
+                        solidColor="#121214"
+                        dotColor="#ff2d2d"
+                        boxSize={100}
+                        opacityClass="opacity-[0.35] dark:opacity-[0.45]"
+                        blur={0}
+                        darken={0.4}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
                     {/* Content Overlay */}
@@ -185,12 +187,10 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
                 )}
 
                 {/* Main Content */}
-                <div className="bg-white dark:bg-cyber-surface border border-gray-100 dark:border-cyber-border rounded-3xl p-8 md:p-12 shadow-xl mb-8">
-                    <article
-                        className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-primary-600"
-                        dangerouslySetInnerHTML={{ __html: news.content }}
-                    />
-                </div>
+                <article
+                    className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-primary-600 mb-12"
+                    dangerouslySetInnerHTML={{ __html: news.content }}
+                />
 
                 {/* Tags & Share */}
                 <div className="flex flex-wrap items-center justify-between gap-4 py-6 border-t border-gray-200 dark:border-cyber-border">
@@ -257,6 +257,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
             )}
 
             <Footer companyInfo={companyInfo} />
+            <ChatWidget />
         </div>
     );
 };

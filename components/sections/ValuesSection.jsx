@@ -2,11 +2,11 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { getImageUrl } from '@/utils/imageUtils';
+import CanvasGridBackground from '@/components/CanvasGridBackground';
 
 const ValuesSection = ({ values }) => {
     const activeValues = values.filter(value => value.is_active);
     const sectionRef = useRef(null);
-    const videoRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -15,9 +15,6 @@ const ValuesSection = ({ values }) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         setIsVisible(true);
-                        if (videoRef.current) videoRef.current.play().catch(() => {});
-                    } else {
-                        if (videoRef.current) videoRef.current.pause();
                     }
                 });
             },
@@ -44,37 +41,7 @@ const ValuesSection = ({ values }) => {
             }}
         >
             {/* Video Background */}
-            <video
-                ref={videoRef}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{ zIndex: 0 }}
-            >
-                <source src="/videos/cpu-animation.mp4" type="video/mp4" />
-            </video>
-
-            {/* Video overlay — separate for light/dark */}
-            <div className="absolute inset-0" style={{ zIndex: 1 }}>
-                <div
-                    className="absolute inset-0 hidden dark:block"
-                    style={{
-                        background: 'linear-gradient(180deg, rgba(15, 15, 18, 0.8) 0%, rgba(15, 15, 18, 0.7) 50%, rgba(15, 15, 18, 0.8) 100%)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                    }}
-                />
-                <div
-                    className="absolute inset-0 block dark:hidden"
-                    style={{
-                        background: 'linear-gradient(180deg, rgba(243, 244, 246, 0.35) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(243, 244, 246, 0.35) 100%)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                    }}
-                />
-            </div>
+            <CanvasGridBackground src="/videos/cpu-animation.mp4" dotColor="#ff2d2d" boxSize={100} blur={3} darken={0.4} />
 
             {/* Grid background */}
             <div

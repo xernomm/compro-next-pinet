@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import CanvasGridBackground from '@/components/CanvasGridBackground';
 
 import { Chip } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -13,6 +14,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SocialMediaWidget from '@/components/SocialMediaWidget';
+import ChatWidget from '@/components/ChatWidget';
 import Loading from '@/components/Loading';
 import { GridPlaceholder } from '@/components/PlaceholderCard';
 import { companyAPI, careerAPI } from '@/api/apiService';
@@ -93,6 +95,9 @@ const CareersPage = () => {
                     className="relative py-24 overflow-hidden grid-bg border-b border-gray-200 dark:border-cyber-border transition-colors duration-300"
                     style={{ background: 'var(--color-bg-secondary)' }}
                 >
+                    {/* Canvas Grid Background Effect */}
+                    <CanvasGridBackground solidColor="#121214" dotColor="#ff2d2d" boxSize={100} opacityClass="opacity-[0.35] dark:opacity-[0.45]" />
+
                     {/* Gradient Orbs */}
                     <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
@@ -265,6 +270,7 @@ const CareersPage = () => {
 
             <Footer companyInfo={companyInfo} />
             <ScrollToTop />
+            <ChatWidget />
             <SocialMediaWidget companyInfo={companyInfo} />
         </>
     );

@@ -10,8 +10,21 @@ import { useInView } from 'react-intersection-observer';
 import { getImageUrl } from '@/utils/imageUtils';
 import { GridPlaceholder } from '../PlaceholderCard';
 
-const ClientCard = ({ client, index, config }) => {
-    const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+const ClientCard = ({ client, index, config, scrollRoot }) => {
+    const { ref, inView, entry } = useInView({ 
+        threshold: 0.05, 
+        root: scrollRoot 
+    });
+
+    const isAbove = entry && entry.rootBounds
+        ? entry.boundingClientRect.top < entry.rootBounds.top
+        : false;
+
+    const transformValue = inView
+        ? 'translateY(0)'
+        : isAbove
+            ? 'translateY(-100px)'
+            : 'translateY(100px)';
 
     return (
         <Tooltip
@@ -38,17 +51,17 @@ const ClientCard = ({ client, index, config }) => {
         >
             <div
                 ref={ref}
-                className="w-[calc(50%-0.75rem)] sm:w-44 h-36 flex-shrink-0 group cursor-pointer animate-fadeIn"
+                className="w-[calc(25%-9px)] sm:w-44 h-20 sm:h-36 flex-shrink-0 group cursor-pointer"
                 onClick={() => client.website_url && window.open(client.website_url, '_blank')}
                 style={{
                     opacity: inView ? 1 : 0,
-                    transform: inView ? 'translateY(0)' : 'translateY(50px)',
-                    transition: `opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)`,
-                    transitionDelay: `${(index % 4) * 0.1}s`,
+                    transform: transformValue,
+                    transition: `opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)`,
+                    transitionDelay: inView ? `${(index % 4) * 0.1}s` : '0s',
                 }}
             >
                 <div
-                    className="relative rounded-xl p-6 md:p-8 w-full h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card"
+                    className="relative rounded-xl p-2 sm:p-6 md:p-8 w-full h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card"
                 >
                     {/* Top gradient bar based on industry type */}
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
@@ -64,8 +77,8 @@ const ClientCard = ({ client, index, config }) => {
 
                     {client.is_featured && (
                         <div className="absolute -top-2 -right-2 z-10">
-                            <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-full p-1.5 shadow-lg">
-                                <StarIcon sx={{ fontSize: 14, color: 'white' }} />
+                            <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-full p-1 shadow-lg">
+                                <StarIcon sx={{ fontSize: { xs: 8, sm: 14 }, color: 'white' }} />
                             </div>
                         </div>
                     )}
@@ -74,11 +87,11 @@ const ClientCard = ({ client, index, config }) => {
                         <img
                             src={getImageUrl(client.logo_url)}
                             alt={client.name}
-                            className="relative z-10 max-w-full max-h-14 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                            className="relative z-10 max-w-full max-h-8 sm:max-h-14 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
                         />
                     ) : (
                         <div className="relative z-10 text-center">
-                            <div className="text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                            <div className="text-[10px] sm:text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                                 {client.name}
                             </div>
                         </div>
@@ -89,6 +102,7 @@ const ClientCard = ({ client, index, config }) => {
                             label={client.industry}
                             size="small"
                             sx={{
+                                display: { xs: 'none', sm: 'inline-flex' },
                                 mt: 2,
                                 fontSize: '0.65rem',
                                 height: '20px',
@@ -112,6 +126,7 @@ const ClientCard = ({ client, index, config }) => {
 
 const ClientsSection = ({ clients }) => {
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
+    const [scrollRoot, setScrollRoot] = useState(null);
 
     const activeClients = clients.filter(client => client.is_active);
     const clientsWithTestimonials = activeClients.filter(client => client.testimonial);
@@ -314,26 +329,42 @@ const ClientsSection = ({ clients }) => {
                 </div>
             )}
 
-            {/* Client Logos - Staggered Wrap Grid */}
+            {/* Client Logos - Staggered Wrap Grid inside scroll container */}
             <div className="relative max-w-6xl mx-auto px-4 mt-8">
                 <h3 className="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
                     Trusted By
                 </h3>
 
-                <div className="flex flex-wrap justify-center gap-6">
-                    {activeClients.map((client, index) => {
-                        const config = getIndustryConfig(client.industry);
-                        return (
-                            <ClientCard
-                                key={`${client.id}-${index}`}
-                                client={client}
-                                index={index}
-                                config={config}
-                            />
-                        );
-                    })}
+                <div
+                    ref={setScrollRoot}
+                    className="max-h-[450px] overflow-y-auto py-6 px-4 no-scrollbar"
+                >
+                    <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
+                        {activeClients.map((client, index) => {
+                            const config = getIndustryConfig(client.industry);
+                            return (
+                                <ClientCard
+                                    key={`${client.id}-${index}`}
+                                    client={client}
+                                    index={index}
+                                    config={config}
+                                    scrollRoot={scrollRoot}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
+
+            <style>{`
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}</style>
         </section>
     );
 };

@@ -8,6 +8,7 @@ import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
+import CanvasGridBackground from '@/components/CanvasGridBackground';
 
 // ─── Animated Counter ────────────────────────────────────────────────
 const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix = '' }) => {
@@ -181,7 +182,6 @@ const YearMarker = ({ year, index }) => {
 const AboutSection = ({ companyInfo, milestones = [] }) => {
     const [activeTab, setActiveTab] = useState(0);
     const sectionRef = useRef(null);
-    const videoRef = useRef(null);
     const timelineRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -194,9 +194,6 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         setIsVisible(true);
-                        if (videoRef.current) videoRef.current.play().catch(() => { });
-                    } else {
-                        if (videoRef.current) videoRef.current.pause();
                     }
                 });
             },
@@ -279,15 +276,7 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                 style={{ borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}
             >
                 {/* Video Background */}
-                <video ref={videoRef} muted loop playsInline preload="metadata" className="absolute inset-0 w-full h-full object-cover" style={{ zIndex: 0 }}>
-                    <source src="/videos/matrix.mp4" type="video/mp4" />
-                </video>
-
-                {/* Video overlays */}
-                <div className="absolute inset-0" style={{ zIndex: 1 }}>
-                    <div className="absolute inset-0 hidden dark:block" style={{ background: 'linear-gradient(135deg, rgba(15, 15, 18, 0.8) 0%, rgba(15, 15, 18, 0.7) 50%, rgba(15, 15, 18, 0.8) 100%)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} />
-                    <div className="absolute inset-0 block dark:hidden" style={{ background: 'linear-gradient(135deg, rgba(243, 244, 246, 0.35) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(243, 244, 246, 0.35) 100%)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} />
-                </div>
+                <CanvasGridBackground src="/videos/matrix.mp4" dotColor="#ff2d2d" boxSize={100} blur={3} darken={0.4} />
 
                 {/* Grid Pattern */}
                 <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(rgba(255, 45, 45, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 45, 45, 0.03) 1px, transparent 1px)`, backgroundSize: '60px 60px', zIndex: 2 }} />
@@ -312,71 +301,126 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                         {/* Bento Block 1: Tabbed Company Info */}
                         {tabData.length > 0 && (
                             <div
-                                className="lg:col-span-2 lg:row-span-2 flex flex-col group relative overflow-hidden rounded-2xl glass-card transition-all duration-500 hover:scale-[1.01] hover:-translate-y-0.5"
+                                className="lg:col-span-2 lg:row-span-2 ux-parent ux-parent--large"
                                 style={{ animation: isVisible ? 'fadeInUp 0.6s ease-out both' : 'none' }}
                             >
-                                <div className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" style={{ background: 'linear-gradient(90deg, #ff2d2d, #ffffff)', zIndex: 5 }} />
-                                <div className="flex flex-wrap" style={{ borderBottom: '1px solid var(--color-border)', zIndex: 4 }}>
-                                    {tabData.map((tab, index) => (
-                                        <button
-                                            key={tab.id}
-                                            onClick={() => setActiveTab(index)}
-                                            className="flex-1 min-w-[90px] px-3 py-4 flex items-center justify-center gap-1.5 transition-all duration-300 relative hover:bg-black/5 dark:hover:bg-white/5"
-                                            style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '0.75rem', fontWeight: activeTab === index ? 600 : 400, letterSpacing: '0.05em', textTransform: 'uppercase', color: activeTab === index ? '#ff2d2d' : 'var(--color-text-secondary)' }}
-                                        >
-                                            <span style={{ transition: 'transform 0.3s', transform: activeTab === index ? 'scale(1.1)' : 'scale(1)' }}>{tab.icon}</span>
-                                            <span className="hidden sm:inline">{tab.label}</span>
-                                            {activeTab === index && <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: '#ff2d2d', boxShadow: '0 0 10px rgba(255, 45, 45, 0.4)' }} />}
-                                        </button>
-                                    ))}
-                                </div>
-                                <div className="p-6 md:p-8 flex-1 flex flex-col justify-center relative" style={{ zIndex: 4 }}>
-                                    {tabData.map((tab, index) => (
-                                        <div key={tab.id} className={`transition-all duration-500 flex-1 flex flex-col justify-center ${activeTab === index ? 'opacity-100 translate-x-0' : 'opacity-0 absolute inset-0 -translate-x-8 pointer-events-none p-6 md:p-8'}`}>
-                                            {activeTab === index && (
-                                                <div>
-                                                    <div className="flex items-center gap-3 mb-4">
-                                                        <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg shadow-red-500/10" style={{ background: '#ff2d2d' }}>{tab.icon}</div>
-                                                        <h3 className="text-xl font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{tab.label}</h3>
-                                                    </div>
-                                                    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none leading-relaxed text-sm" style={{ color: 'var(--color-text-secondary)' }} dangerouslySetInnerHTML={{ __html: tab.content }} />
-                                                </div>
-                                            )}
+                                <div className="ux-card flex flex-col justify-between">
+                                    <div className="ux-logo" aria-hidden="true">
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle">
+                                            {tabData[activeTab]?.icon || <BusinessIcon />}
+                                        </span>
+                                    </div>
+                                    <div className="ux-glass"></div>
+                                    <div className="ux-content flex flex-col h-full relative z-10 p-6 md:p-8">
+                                        <div className="flex flex-wrap mb-4" style={{ borderBottom: '1px solid var(--color-border)', zIndex: 4 }}>
+                                            {tabData.map((tab, index) => (
+                                                <button
+                                                    key={tab.id}
+                                                    onClick={() => setActiveTab(index)}
+                                                    className="flex-1 min-w-[90px] px-3 py-4 flex items-center justify-center gap-1.5 transition-all duration-300 relative hover:bg-black/5 dark:hover:bg-white/5"
+                                                    style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '0.75rem', fontWeight: activeTab === index ? 600 : 400, letterSpacing: '0.05em', textTransform: 'uppercase', color: activeTab === index ? 'var(--ux-cta)' : 'var(--ux-body)' }}
+                                                >
+                                                    <span style={{ transition: 'transform 0.3s', transform: activeTab === index ? 'scale(1.1)' : 'scale(1)' }}>{tab.icon}</span>
+                                                    <span className="hidden sm:inline">{tab.label}</span>
+                                                    {activeTab === index && <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: 'var(--ux-cta)', boxShadow: '0 0 10px rgba(255, 45, 45, 0.4)' }} />}
+                                                </button>
+                                            ))}
                                         </div>
-                                    ))}
+                                        <div className="flex-1 flex flex-col justify-center relative">
+                                            {tabData.map((tab, index) => (
+                                                <div key={tab.id} className={`transition-all duration-500 flex-1 flex flex-col justify-center ${activeTab === index ? 'opacity-100 translate-x-0' : 'opacity-0 absolute inset-0 -translate-x-8 pointer-events-none'}`}>
+                                                    {activeTab === index && (
+                                                        <div className="pr-[90px] sm:pr-[120px] md:pr-[150px]">
+                                                            <div className="flex items-center gap-3 mb-4">
+                                                                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg shadow-red-500/10" style={{ background: 'var(--ux-cta)' }}>{tab.icon}</div>
+                                                                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--ux-title)' }}>{tab.label}</h3>
+                                                            </div>
+                                                            <div className="prose prose-base md:prose-lg dark:prose-invert max-w-none leading-relaxed text-base md:text-lg font-medium" style={{ color: 'var(--ux-tab-text)' }} dangerouslySetInnerHTML={{ __html: tab.content }} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )}
 
                         {/* Stats Cards */}
-                        {stats.map((stat, index) => (
-                            <div key={stat.id} className="group relative overflow-hidden rounded-2xl p-6 flex flex-col justify-between glass-card transition-all duration-500 hover:scale-[1.01] hover:-translate-y-0.5" style={{ animation: isVisible ? `fadeInUp 0.6s ease-out ${(index + 1) * 0.1}s both` : 'none' }}>
-                                <div className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" style={{ background: 'linear-gradient(90deg, #ff2d2d, #ffffff)', zIndex: 5 }} />
-                                <div className="w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-105" style={{ color: 'var(--color-primary)', background: 'rgba(255, 45, 45, 0.08)', border: '1px solid rgba(255, 45, 45, 0.15)', zIndex: 4 }}>{stat.icon}</div>
-                                <div className="mt-8" style={{ zIndex: 4 }}>
-                                    <AnimatedCounter end={stat.value} suffix={stat.suffix} duration={2000 + (index * 200)} />
-                                    <div className="mt-1 text-xs font-semibold" style={{ color: 'var(--color-text-secondary)', fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.05em', textTransform: 'uppercase' }}>{stat.label}</div>
+                        {stats.map((stat, index) => {
+                            let themeClass = "";
+                            if (index === 0) themeClass = "ux-parent--cut";
+                            else if (index === 1) themeClass = "ux-parent--solar";
+                            else if (index === 2) themeClass = "ux-parent--prism";
+                            else if (index === 3) themeClass = "ux-parent--void";
+
+                            return (
+                                <div
+                                    key={stat.id}
+                                    className={`ux-parent ${themeClass}`}
+                                    style={{ animation: isVisible ? `fadeInUp 0.6s ease-out ${(index + 1) * 0.1}s both` : 'none' }}
+                                >
+                                    <div className="ux-card flex flex-col justify-between">
+                                        <div className="ux-logo" aria-hidden="true">
+                                            <span className="ux-circle"></span>
+                                            <span className="ux-circle"></span>
+                                            <span className="ux-circle"></span>
+                                            <span className="ux-circle"></span>
+                                            <span className="ux-circle">
+                                                {stat.icon}
+                                            </span>
+                                        </div>
+                                        <div className="ux-glass"></div>
+                                        <div className="ux-content flex flex-col justify-between h-full p-6">
+                                            <div className="w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300"
+                                                style={{ color: 'var(--ux-cta)', background: 'rgba(255, 45, 45, 0.08)', border: '1px solid rgba(255, 45, 45, 0.15)', zIndex: 4 }}>
+                                                {stat.icon}
+                                            </div>
+                                            <div className="mt-8" style={{ zIndex: 4 }}>
+                                                <AnimatedCounter end={stat.value} suffix={stat.suffix} duration={2000 + (index * 200)} />
+                                                <div className="mt-1 text-xs font-semibold" style={{ color: 'var(--ux-body)', fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.05em', textTransform: 'uppercase' }}>{stat.label}</div>
+                                            </div>
+                                            <div className="mt-4 w-6 h-[1px] transition-all duration-500" style={{ background: 'linear-gradient(90deg, var(--ux-cta), transparent)', zIndex: 4 }} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="mt-4 w-6 h-[1px] transition-all duration-500 group-hover:w-10" style={{ background: 'linear-gradient(90deg, #ff2d2d, transparent)', zIndex: 4 }} />
-                            </div>
-                        ))}
+                            );
+                        })}
 
                         {/* Location Card */}
                         {companyInfo.address && (
-                            <div className="lg:col-span-2 group relative overflow-hidden rounded-2xl p-6 glass-card transition-all duration-500 hover:scale-[1.01] hover:-translate-y-0.5" style={{ animation: isVisible ? 'fadeInUp 0.6s ease-out 0.4s both' : 'none' }}>
-                                <div className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" style={{ background: 'linear-gradient(90deg, #ff2d2d, #ffffff)', zIndex: 5 }} />
-                                <div className="flex items-start gap-4" style={{ zIndex: 4, position: 'relative' }}>
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-white shadow-lg" style={{ background: 'linear-gradient(135deg, #ff2d2d, #ed1515)' }}>
-                                        <LocationOnIcon sx={{ fontSize: 24 }} />
+                            <div
+                                className="lg:col-span-2 ux-parent ux-parent--wide ux-parent--ocean"
+                                style={{ animation: isVisible ? 'fadeInUp 0.6s ease-out 0.4s both' : 'none' }}
+                            >
+                                <div className="ux-card flex items-center">
+                                    <div className="ux-logo" aria-hidden="true">
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle"></span>
+                                        <span className="ux-circle">
+                                            <LocationOnIcon sx={{ fontSize: 24 }} />
+                                        </span>
                                     </div>
-                                    <div>
-                                        <h3 className="font-bold text-base mb-1.5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Our Location</h3>
-                                        <div style={{ color: 'var(--color-text-secondary)', fontSize: '0.85rem' }} className="space-y-0.5">
-                                            <p className="font-medium text-white/90 dark:text-white/90">{companyInfo.address}</p>
-                                            {(companyInfo.city || companyInfo.province || companyInfo.postal_code) && (
-                                                <p>{[companyInfo.city, companyInfo.province, companyInfo.postal_code].filter(Boolean).join(', ')}</p>
-                                            )}
-                                            {companyInfo.country && <p>{companyInfo.country}</p>}
+                                    <div className="ux-glass"></div>
+                                    <div className="ux-content w-full flex items-start gap-4 p-6 md:p-8">
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-white shadow-lg" style={{ background: 'linear-gradient(135deg, var(--ux-cta), #ed1515)' }}>
+                                            <LocationOnIcon sx={{ fontSize: 24 }} />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-base mb-1.5" style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--ux-title)' }}>Our Location</h3>
+                                            <div style={{ color: 'var(--ux-body)', fontSize: '0.85rem' }} className="space-y-0.5 pr-[90px]">
+                                                <p className="font-medium">{companyInfo.address}</p>
+                                                {(companyInfo.city || companyInfo.province || companyInfo.postal_code) && (
+                                                    <p>{[companyInfo.city, companyInfo.province, companyInfo.postal_code].filter(Boolean).join(', ')}</p>
+                                                )}
+                                                {companyInfo.country && <p>{companyInfo.country}</p>}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -384,31 +428,45 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                         )}
 
                         {/* Contact Card */}
-                        <div className="lg:col-span-2 group relative overflow-hidden rounded-2xl p-6 flex flex-col justify-center glass-card transition-all duration-500 hover:scale-[1.01] hover:-translate-y-0.5" style={{ animation: isVisible ? 'fadeInUp 0.6s ease-out 0.5s both' : 'none' }}>
-                            <div className="absolute top-0 left-0 right-0 h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" style={{ background: 'linear-gradient(90deg, #ff2d2d, #ffffff)', zIndex: 5 }} />
-                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 justify-around" style={{ zIndex: 4, position: 'relative' }}>
-                                {companyInfo.email && (
-                                    <a href={`mailto:${companyInfo.email}`} className="flex items-center gap-3 group/link">
-                                        <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-md group-hover/link:scale-105 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #ed1515, #c80d0d)' }}>
-                                            <EmailIcon sx={{ fontSize: 20 }} />
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>Email Us</p>
-                                            <p className="text-sm font-medium text-white/90 group-hover/link:text-[#ff2d2d] transition-colors">{companyInfo.email}</p>
-                                        </div>
-                                    </a>
-                                )}
-                                {companyInfo.phone && (
-                                    <a href={`tel:${companyInfo.phone}`} className="flex items-center gap-3 group/link">
-                                        <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-md group-hover/link:scale-105 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>
-                                            <PhoneIcon sx={{ fontSize: 20 }} />
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>Call Us</p>
-                                            <p className="text-sm font-medium text-white/90 group-hover/link:text-[#10b981] transition-colors">{companyInfo.phone}</p>
-                                        </div>
-                                    </a>
-                                )}
+                        <div
+                            className="lg:col-span-2 ux-parent ux-parent--wide ux-parent--void"
+                            style={{ animation: isVisible ? 'fadeInUp 0.6s ease-out 0.5s both' : 'none' }}
+                        >
+                            <div className="ux-card flex flex-col justify-center">
+                                <div className="ux-logo" aria-hidden="true">
+                                    <span className="ux-circle"></span>
+                                    <span className="ux-circle"></span>
+                                    <span className="ux-circle"></span>
+                                    <span className="ux-circle"></span>
+                                    <span className="ux-circle">
+                                        <EmailIcon sx={{ fontSize: 24 }} />
+                                    </span>
+                                </div>
+                                <div className="ux-glass"></div>
+                                <div className="ux-content w-full flex flex-col sm:flex-row gap-4 sm:gap-8 justify-around p-6 md:p-8">
+                                    {companyInfo.email && (
+                                        <a href={`mailto:${companyInfo.email}`} className="flex items-center gap-3 group/link z-10">
+                                            <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-md group-hover/link:scale-105 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, var(--ux-cta), #c80d0d)' }}>
+                                                <EmailIcon sx={{ fontSize: 20 }} />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--ux-body)' }}>Email Us</p>
+                                                <p className="text-sm font-medium transition-colors" style={{ color: 'var(--ux-title)' }}>{companyInfo.email}</p>
+                                            </div>
+                                        </a>
+                                    )}
+                                    {companyInfo.phone && (
+                                        <a href={`tel:${companyInfo.phone}`} className="flex items-center gap-3 group/link z-10">
+                                            <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-md group-hover/link:scale-105 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>
+                                                <PhoneIcon sx={{ fontSize: 20 }} />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--ux-body)' }}>Call Us</p>
+                                                <p className="text-sm font-medium transition-colors" style={{ color: 'var(--ux-title)' }}>{companyInfo.phone}</p>
+                                            </div>
+                                        </a>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -418,6 +476,197 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                     @keyframes fadeInUp {
                         from { opacity: 0; transform: translateY(24px); }
                         to { opacity: 1; transform: translateY(0); }
+                    }
+
+                    /* ─── 3D Card Container Perspective ─── */
+                    .ux-parent {
+                        width: 100%;
+                        height: 100%;
+                        perspective: 1000px;
+                        perspective-origin: 50% 50%;
+                    }
+
+                    .ux-parent--large {
+                        min-height: 380px;
+                    }
+
+                    .ux-parent--wide {
+                        width: 100%;
+                    }
+
+                    /* ─── The Card Body (Rotates in 3D) ─── */
+                    .ux-card {
+                        position: relative;
+                        height: 100%;
+                        width: 100%;
+                        border-radius: 32px;
+                        background: var(--ux-grad);
+                        transform-style: preserve-3d;
+                        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.55s ease, border-color 0.55s ease;
+                        border: 1px solid var(--color-border);
+                        box-shadow: 0 10px 30px var(--shadow-color);
+                    }
+
+                    .ux-parent:hover .ux-card {
+                        transform: rotate3d(1, -1, 0, 12deg);
+                        border-color: rgba(255, 45, 45, 0.4);
+                        box-shadow: 0 20px 48px var(--shadow-color), 0 0 40px rgba(255, 45, 45, 0.1);
+                    }
+
+                    /* ─── Theme Colors mapping ─── */
+                    :global(.dark) .ux-parent {
+                        --ux-grad: linear-gradient(135deg, #121214 0%, #16161a 100%);
+                        --ux-title: #ffffff;
+                        --ux-body: rgba(255, 255, 255, 0.7);
+                        --ux-tab-text: rgba(255, 255, 255, 0.95);
+                        --ux-cta: #ff2d2d;
+                        --ux-orbit: rgba(255, 45, 45, 0.06);
+                        --ux-fill: #ff2d2d;
+                        --glass-edge: rgba(255, 45, 45, 0.25);
+                        --shadow-color: rgba(0, 0, 0, 0.6);
+                    }
+
+                    :global(.light) .ux-parent,
+                    :global(:root:not(.dark)) .ux-parent {
+                        --ux-grad: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+                        --ux-title: #0f172a;
+                        --ux-body: #4b5563;
+                        --ux-tab-text: #1e293b;
+                        --ux-cta: #ed1515;
+                        --ux-orbit: rgba(237, 21, 21, 0.05);
+                        --ux-fill: #ed1515;
+                        --glass-edge: rgba(237, 21, 21, 0.2);
+                        --shadow-color: rgba(0, 0, 0, 0.08);
+                    }
+
+                    /* ─── Specific layout colors variation ─── */
+                    :global(.dark) .ux-parent--cut {
+                        --ux-grad: linear-gradient(135deg, #16161a 0%, #200d0d 100%);
+                    }
+                    :global(.dark) .ux-parent--solar {
+                        --ux-grad: linear-gradient(135deg, #1c1c22 0%, #121214 100%);
+                    }
+                    :global(.dark) .ux-parent--prism {
+                        --ux-grad: linear-gradient(135deg, #121214 0%, #1a1a24 100%);
+                    }
+                    :global(.dark) .ux-parent--void {
+                        --ux-grad: linear-gradient(135deg, #0d0d10 0%, #16161a 100%);
+                    }
+
+                    /* ─── Structural variants ─── */
+                    .ux-parent--cut .ux-card {
+                        border-radius: 28px;
+                        clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px);
+                    }
+                    .ux-parent--cut .ux-glass {
+                        border-radius: 24px !important;
+                        clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+                    }
+
+                    /* ─── Glass Sheet (Middle Layer) ─── */
+                    .ux-glass {
+                        transform-style: preserve-3d;
+                        position: absolute;
+                        inset: 8px;
+                        border-radius: 28px;
+                        border-top-right-radius: 80px;
+                        background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+                        transform: translate3d(0, 0, 25px);
+                        border-inline-start: 1px solid var(--glass-edge);
+                        border-bottom: 1px solid var(--glass-edge);
+                        transition: all 0.5s ease-in-out;
+                        pointer-events: none;
+                    }
+
+                    :global(.light) .ux-glass,
+                    :global(:root:not(.dark)) .ux-glass {
+                        background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
+                    }
+
+                    /* ─── Logo orbits (Top Right) ─── */
+                    .ux-logo {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 180px;
+                        height: 180px;
+                        transform-style: preserve-3d;
+                        pointer-events: none;
+                        z-index: 2;
+                    }
+
+                    .ux-circle {
+                        display: block;
+                        position: absolute;
+                        aspect-ratio: 1;
+                        border-radius: 50%;
+                        background: var(--ux-orbit);
+                        box-shadow: rgba(0, 0, 0, 0.03) -8px 8px 20px 0;
+                        backdrop-filter: blur(4px);
+                        -webkit-backdrop-filter: blur(4px);
+                        transition: all 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+                    }
+
+                    .ux-circle:nth-child(1) { width: 150px; transform: translate3d(0, 0, 20px); top: 8px; right: 8px; }
+                    .ux-circle:nth-child(2) { width: 120px; transform: translate3d(0, 0, 40px); top: 12px; right: 12px; transition-delay: 0.04s; }
+                    .ux-circle:nth-child(3) { width: 95px; transform: translate3d(0, 0, 60px); top: 16px; right: 16px; transition-delay: 0.08s; }
+                    .ux-circle:nth-child(4) { width: 70px; transform: translate3d(0, 0, 80px); top: 20px; right: 20px; transition-delay: 0.12s; }
+                    .ux-circle:nth-child(5) { 
+                        width: 48px; 
+                        transform: translate3d(0, 0, 100px); 
+                        top: 24px; 
+                        right: 24px; 
+                        display: grid; 
+                        place-content: center; 
+                        transition-delay: 0.16s;
+                        background: var(--ux-fill);
+                        color: #ffffff;
+                        box-shadow: 0 4px 12px rgba(255, 45, 45, 0.3);
+                    }
+
+                    .ux-circle:nth-child(5) :global(svg) {
+                        width: 20px;
+                        height: 20px;
+                        fill: currentColor;
+                        color: currentColor;
+                    }
+
+                    .ux-parent:hover .ux-circle:nth-child(2) { transform: translate3d(0, 0, 50px); }
+                    .ux-parent:hover .ux-circle:nth-child(3) { transform: translate3d(0, 0, 75px); }
+                    .ux-parent:hover .ux-circle:nth-child(4) { transform: translate3d(0, 0, 100px); }
+                    .ux-parent:hover .ux-circle:nth-child(5) { transform: translate3d(0, 0, 125px); }
+
+                    /* ─── Content ─── */
+                    .ux-content {
+                        transform: translate3d(0, 0, 26px);
+                        position: relative;
+                        z-index: 3;
+                    }
+
+                    /* Ensure prose typography inside bento cards has high visibility */
+                    :global(.prose) {
+                        color: var(--ux-tab-text) !important;
+                    }
+                    :global(.prose p), :global(.prose li) {
+                        color: var(--ux-tab-text) !important;
+                    }
+                    :global(.prose strong) {
+                        color: var(--ux-title) !important;
+                    }
+                    :global(.prose h1), :global(.prose h2), :global(.prose h3), :global(.prose h4) {
+                        color: var(--ux-title) !important;
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        .ux-card, .ux-circle, .ux-glass {
+                            transition: none !important;
+                        }
+                        .ux-parent:hover .ux-card {
+                            transform: none !important;
+                        }
+                        .ux-parent:hover .ux-circle {
+                            transform: translate3d(0, 0, 20px) !important;
+                        }
                     }
                 `}</style>
             </section>

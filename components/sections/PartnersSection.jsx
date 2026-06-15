@@ -1,14 +1,27 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Tooltip, Chip } from '@mui/material';
 import { useInView } from 'react-intersection-observer';
 import { getImageUrl } from '@/utils/imageUtils';
 import { GridPlaceholder } from '../PlaceholderCard';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
-const PartnerCard = ({ partner, index, config }) => {
-    const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+const PartnerCard = ({ partner, index, config, scrollRoot }) => {
+    const { ref, inView, entry } = useInView({ 
+        threshold: 0.05, 
+        root: scrollRoot 
+    });
+
+    const isAbove = entry && entry.rootBounds
+        ? entry.boundingClientRect.top < entry.rootBounds.top
+        : false;
+
+    const transformValue = inView
+        ? 'translateY(0)'
+        : isAbove
+            ? 'translateY(-100px)'
+            : 'translateY(100px)';
 
     return (
         <Tooltip
@@ -27,16 +40,16 @@ const PartnerCard = ({ partner, index, config }) => {
         >
             <div
                 ref={ref}
-                className="w-[calc(50%-0.75rem)] sm:w-44 h-36 flex-shrink-0 group cursor-pointer"
+                className="w-[calc(25%-9px)] sm:w-44 h-20 sm:h-36 flex-shrink-0 group cursor-pointer"
                 onClick={() => partner.website_url && window.open(partner.website_url, '_blank')}
                 style={{
                     opacity: inView ? 1 : 0,
-                    transform: inView ? 'translateY(0)' : 'translateY(50px)',
-                    transition: `opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)`,
-                    transitionDelay: `${(index % 4) * 0.1}s`,
+                    transform: transformValue,
+                    transition: `opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)`,
+                    transitionDelay: inView ? `${(index % 4) * 0.1}s` : '0s',
                 }}
             >
-                <div className="relative rounded-xl p-6 w-full h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card">
+                <div className="relative rounded-xl p-2 sm:p-6 w-full h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card">
                     {/* Top gradient bar based on partnership type */}
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
 
@@ -44,11 +57,11 @@ const PartnerCard = ({ partner, index, config }) => {
                         <img
                             src={getImageUrl(partner.logo_url)}
                             alt={partner.name}
-                            className="max-w-full max-h-14 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                            className="max-w-full max-h-8 sm:max-h-14 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
                         />
                     ) : (
                         <div className="text-center">
-                            <div className="text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                            <div className="text-[10px] sm:text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                                 {partner.name}
                             </div>
                         </div>
@@ -59,6 +72,7 @@ const PartnerCard = ({ partner, index, config }) => {
                             label={partner.partnership_type}
                             size="small"
                             sx={{
+                                display: { xs: 'none', sm: 'inline-flex' },
                                 mt: 2,
                                 fontSize: '0.65rem',
                                 height: '20px',
@@ -79,6 +93,7 @@ const PartnerCard = ({ partner, index, config }) => {
 };
 
 const PartnersSection = ({ partners }) => {
+    const [scrollRoot, setScrollRoot] = useState(null);
     const activePartners = partners.filter(partner => partner.is_active);
 
     if (activePartners.length === 0) {
@@ -151,37 +166,68 @@ const PartnersSection = ({ partners }) => {
                     </p>
                 </div>
 
+                {/* Partnership Type Stats - Running Marquee "Etalase" */}
                 {Object.keys(partnersByType).length > 1 && (
-                    <div className="flex flex-wrap justify-center gap-4 mb-12">
-                        {Object.entries(partnersByType).map(([type, typePartners]) => {
-                            const config = getTypeConfig(type);
-                            return (
-                                <div key={type} className="flex items-center gap-2 px-4 py-2 rounded-full glass-card">
-                                    <div className={`w-3 h-3 rounded-full bg-gradient-to-br ${config.gradient}`}></div>
-                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">{type}</span>
-                                    <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: config.bgLight, color: config.text }}>
-                                        {typePartners.length}
-                                    </span>
-                                </div>
-                            );
-                        })}
+                    <div className="relative overflow-hidden w-full mb-12 py-2">
+                        {/* Gradient Fade Edges */}
+                        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, var(--color-bg-secondary), transparent)' }}></div>
+                        <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, var(--color-bg-secondary), transparent)' }}></div>
+
+                        <div className="flex gap-4 animate-marquee-types" style={{ width: 'fit-content' }}>
+                            {/* Duplicate items for seamless infinite scroll */}
+                            {[...Object.entries(partnersByType), ...Object.entries(partnersByType)].map(([type, typePartners], idx) => {
+                                const config = getTypeConfig(type);
+                                return (
+                                    <div key={`${type}-${idx}`} className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-card text-xs">
+                                        <div className={`w-2 h-2 rounded-full bg-gradient-to-br ${config.gradient}`}></div>
+                                        <span className="font-medium text-gray-700 dark:text-gray-300 capitalize">{type}</span>
+                                        <span className="font-bold px-1.5 py-0.2 rounded-full" style={{ backgroundColor: config.bgLight, color: config.text, fontSize: '0.65rem' }}>
+                                            {typePartners.length}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
 
-                <div className="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto px-4 mt-6">
-                    {activePartners.map((partner, index) => {
-                        const config = getTypeConfig(partner.partnership_type);
-                        return (
-                            <PartnerCard
-                                key={`${partner.id}-${index}`}
-                                partner={partner}
-                                index={index}
-                                config={config}
-                            />
-                        );
-                    })}
+                <div
+                    ref={setScrollRoot}
+                    className="max-h-[450px] overflow-y-auto py-6 px-4 no-scrollbar"
+                >
+                    <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
+                        {activePartners.map((partner, index) => {
+                            const config = getTypeConfig(partner.partnership_type);
+                            return (
+                                <PartnerCard
+                                    key={`${partner.id}-${index}`}
+                                    partner={partner}
+                                    index={index}
+                                    config={config}
+                                    scrollRoot={scrollRoot}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
+
+            <style>{`
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                @keyframes marquee-types {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                .animate-marquee-types {
+                    animation: marquee-types 20s linear infinite;
+                }
+            `}</style>
         </section>
     );
 };

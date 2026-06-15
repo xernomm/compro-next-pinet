@@ -15,6 +15,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SocialMediaWidget from '@/components/SocialMediaWidget';
+import ChatWidget from '@/components/ChatWidget';
 import Loading from '@/components/Loading';
 
 // API Services
@@ -164,6 +165,7 @@ const HomePage = () => {
 
             <Footer companyInfo={data.companyInfo} />
             <ScrollToTop />
+            <ChatWidget />
             <SocialMediaWidget companyInfo={data.companyInfo} />
         </>
     );

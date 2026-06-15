@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import CanvasGridBackground from '@/components/CanvasGridBackground';
 import { useParams, useRouter } from 'next/navigation';
 import { Chip } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -18,6 +19,7 @@ import { format } from 'date-fns';
 import Loading from '@/components/Loading';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ChatWidget from '@/components/ChatWidget';
 
 const EventDetail = ({ companyInfo, currentSlug }) => {
     const { slug: paramSlug } = useParams();
@@ -107,6 +109,9 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
                 className="relative pt-24 pb-36 overflow-hidden grid-bg border-b border-gray-200 dark:border-cyber-border transition-colors duration-300"
                 style={{ background: 'var(--color-bg-secondary)' }}
             >
+                {/* Canvas Grid Background Effect */}
+                <CanvasGridBackground solidColor="#121214" dotColor="#ff2d2d" boxSize={100} opacityClass="opacity-[0.35] dark:opacity-[0.45]" />
+
                 {/* Gradient Orbs */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>
@@ -438,6 +443,7 @@ const EventDetail = ({ companyInfo, currentSlug }) => {
             </div>
 
             <Footer companyInfo={companyInfo} />
+            <ChatWidget />
         </div>
     );
 };
