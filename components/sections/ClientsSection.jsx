@@ -1,18 +1,117 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Chip, Tooltip } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import StarIcon from '@mui/icons-material/Star';
+import { useInView } from 'react-intersection-observer';
 import { getImageUrl } from '@/utils/imageUtils';
 import { GridPlaceholder } from '../PlaceholderCard';
 
+const ClientCard = ({ client, index, config }) => {
+    const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+
+    return (
+        <Tooltip
+            title={
+                <div className="p-2">
+                    <div className="font-semibold mb-1">{client.name}</div>
+                    {client.industry && (
+                        <div className="text-sm mb-1">Industry: {client.industry}</div>
+                    )}
+                    {client.description && (
+                        <div className="text-sm mb-2">{client.description}</div>
+                    )}
+                    {client.project_description && (
+                        <div className="text-sm mb-2">
+                            <span className="font-semibold">Project:</span> {client.project_description}
+                        </div>
+                    )}
+                    {client.collaboration_since && (
+                        <div className="text-xs">Client since {client.collaboration_since}</div>
+                    )}
+                </div>
+            }
+            arrow
+        >
+            <div
+                ref={ref}
+                className="w-[calc(50%-0.75rem)] sm:w-44 h-36 flex-shrink-0 group cursor-pointer animate-fadeIn"
+                onClick={() => client.website_url && window.open(client.website_url, '_blank')}
+                style={{
+                    opacity: inView ? 1 : 0,
+                    transform: inView ? 'translateY(0)' : 'translateY(50px)',
+                    transition: `opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)`,
+                    transitionDelay: `${(index % 4) * 0.1}s`,
+                }}
+            >
+                <div
+                    className="relative rounded-xl p-6 md:p-8 w-full h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card"
+                >
+                    {/* Top gradient bar based on industry type */}
+                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
+
+                    {/* Glow effect on hover */}
+                    <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                        style={{
+                            boxShadow: `0 0 30px ${config.glow}, inset 0 0 20px ${config.glow}`,
+                            borderRadius: '1rem',
+                        }}
+                    ></div>
+
+                    {client.is_featured && (
+                        <div className="absolute -top-2 -right-2 z-10">
+                            <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-full p-1.5 shadow-lg">
+                                <StarIcon sx={{ fontSize: 14, color: 'white' }} />
+                            </div>
+                        </div>
+                    )}
+
+                    {client.logo_url ? (
+                        <img
+                            src={getImageUrl(client.logo_url)}
+                            alt={client.name}
+                            className="relative z-10 max-w-full max-h-14 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                        />
+                    ) : (
+                        <div className="relative z-10 text-center">
+                            <div className="text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                                {client.name}
+                            </div>
+                        </div>
+                    )}
+
+                    {client.industry && (
+                        <Chip
+                            label={client.industry}
+                            size="small"
+                            sx={{
+                                mt: 2,
+                                fontSize: '0.65rem',
+                                height: '20px',
+                                textTransform: 'capitalize',
+                                backgroundColor: config.bgLight,
+                                color: config.text,
+                                fontWeight: 600,
+                                position: 'relative',
+                                zIndex: 10,
+                            }}
+                        />
+                    )}
+
+                    {/* Shine effect on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                </div>
+            </div>
+        </Tooltip>
+    );
+};
+
 const ClientsSection = ({ clients }) => {
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
-    const marqueeRef = useRef(null);
 
     const activeClients = clients.filter(client => client.is_active);
     const clientsWithTestimonials = activeClients.filter(client => client.testimonial);
@@ -46,133 +145,29 @@ const ClientsSection = ({ clients }) => {
         );
     }
 
-    // Use activeClients directly (no duplication)
-
-    // Industry type styling config (similar to partners)
     const industryTypeConfig = {
-        technology: {
-            gradient: 'from-blue-500 to-indigo-600',
-            bgLight: 'rgba(59, 130, 246, 0.1)',
-            text: '#3b82f6',
-            glow: 'rgba(59, 130, 246, 0.3)'
-        },
-        finance: {
-            gradient: 'from-emerald-500 to-teal-600',
-            bgLight: 'rgba(16, 185, 129, 0.1)',
-            text: '#10b981',
-            glow: 'rgba(16, 185, 129, 0.3)'
-        },
-        banking: {
-            gradient: 'from-green-500 to-emerald-600',
-            bgLight: 'rgba(34, 197, 94, 0.1)',
-            text: '#22c55e',
-            glow: 'rgba(34, 197, 94, 0.3)'
-        },
-        healthcare: {
-            gradient: 'from-rose-500 to-pink-600',
-            bgLight: 'rgba(244, 63, 94, 0.1)',
-            text: '#f43f5e',
-            glow: 'rgba(244, 63, 94, 0.3)'
-        },
-        manufacturing: {
-            gradient: 'from-amber-500 to-orange-600',
-            bgLight: 'rgba(245, 158, 11, 0.1)',
-            text: '#f59e0b',
-            glow: 'rgba(245, 158, 11, 0.3)'
-        },
-        retail: {
-            gradient: 'from-purple-500 to-violet-600',
-            bgLight: 'rgba(139, 92, 246, 0.1)',
-            text: '#8b5cf6',
-            glow: 'rgba(139, 92, 246, 0.3)'
-        },
-        education: {
-            gradient: 'from-slate-400 to-slate-600',
-            bgLight: 'rgba(148, 163, 184, 0.1)',
-            text: '#94a3b8',
-            glow: 'rgba(148, 163, 184, 0.3)'
-        },
-        government: {
-            gradient: 'from-slate-500 to-gray-600',
-            bgLight: 'rgba(100, 116, 139, 0.1)',
-            text: '#64748b',
-            glow: 'rgba(100, 116, 139, 0.3)'
-        },
-        telecommunications: {
-            gradient: 'from-indigo-500 to-blue-600',
-            bgLight: 'rgba(99, 102, 241, 0.1)',
-            text: '#6366f1',
-            glow: 'rgba(99, 102, 241, 0.3)'
-        },
-        energy: {
-            gradient: 'from-yellow-500 to-orange-600',
-            bgLight: 'rgba(234, 179, 8, 0.1)',
-            text: '#eab308',
-            glow: 'rgba(234, 179, 8, 0.3)'
-        },
-        logistics: {
-            gradient: 'from-sky-500 to-blue-600',
-            bgLight: 'rgba(14, 165, 233, 0.1)',
-            text: '#0ea5e9',
-            glow: 'rgba(14, 165, 233, 0.3)'
-        },
-        transportation: {
-            gradient: 'from-teal-500 to-emerald-600',
-            bgLight: 'rgba(20, 184, 166, 0.1)',
-            text: '#14b8a6',
-            glow: 'rgba(20, 184, 166, 0.3)'
-        },
-        hospitality: {
-            gradient: 'from-fuchsia-500 to-pink-600',
-            bgLight: 'rgba(217, 70, 239, 0.1)',
-            text: '#d946ef',
-            glow: 'rgba(217, 70, 239, 0.3)'
-        },
-        media: {
-            gradient: 'from-red-500 to-orange-600',
-            bgLight: 'rgba(239, 68, 68, 0.1)',
-            text: '#ef4444',
-            glow: 'rgba(239, 68, 68, 0.3)'
-        },
-        insurance: {
-            gradient: 'from-lime-500 to-green-600',
-            bgLight: 'rgba(132, 204, 22, 0.1)',
-            text: '#84cc16',
-            glow: 'rgba(132, 204, 22, 0.3)'
-        },
-        construction: {
-            gradient: 'from-stone-500 to-neutral-600',
-            bgLight: 'rgba(120, 113, 108, 0.1)',
-            text: '#78716c',
-            glow: 'rgba(120, 113, 108, 0.3)'
-        },
-        agriculture: {
-            gradient: 'from-green-600 to-lime-600',
-            bgLight: 'rgba(22, 163, 74, 0.1)',
-            text: '#16a34a',
-            glow: 'rgba(22, 163, 74, 0.3)'
-        },
-        realestate: {
-            gradient: 'from-violet-500 to-purple-600',
-            bgLight: 'rgba(124, 58, 237, 0.1)',
-            text: '#7c3aed',
-            glow: 'rgba(124, 58, 237, 0.3)'
-        },
-        automotive: {
-            gradient: 'from-zinc-500 to-slate-600',
-            bgLight: 'rgba(113, 113, 122, 0.1)',
-            text: '#71717a',
-            glow: 'rgba(113, 113, 122, 0.3)'
-        },
-        pharmaceutical: {
-            gradient: 'from-pink-500 to-rose-600',
-            bgLight: 'rgba(236, 72, 153, 0.1)',
-            text: '#ec4899',
-            glow: 'rgba(236, 72, 153, 0.3)'
-        }
+        technology: { gradient: 'from-blue-500 to-indigo-600', bgLight: 'rgba(59, 130, 246, 0.1)', text: '#3b82f6', glow: 'rgba(59, 130, 246, 0.3)' },
+        finance: { gradient: 'from-emerald-500 to-teal-600', bgLight: 'rgba(16, 185, 129, 0.1)', text: '#10b981', glow: 'rgba(16, 185, 129, 0.3)' },
+        banking: { gradient: 'from-green-500 to-emerald-600', bgLight: 'rgba(34, 197, 94, 0.1)', text: '#22c55e', glow: 'rgba(34, 197, 94, 0.3)' },
+        healthcare: { gradient: 'from-rose-500 to-pink-600', bgLight: 'rgba(244, 63, 94, 0.1)', text: '#f43f5e', glow: 'rgba(244, 63, 94, 0.3)' },
+        manufacturing: { gradient: 'from-amber-500 to-orange-600', bgLight: 'rgba(245, 158, 11, 0.1)', text: '#f59e0b', glow: 'rgba(245, 158, 11, 0.3)' },
+        retail: { gradient: 'from-purple-500 to-violet-600', bgLight: 'rgba(139, 92, 246, 0.1)', text: '#8b5cf6', glow: 'rgba(139, 92, 246, 0.3)' },
+        education: { gradient: 'from-slate-400 to-slate-600', bgLight: 'rgba(148, 163, 184, 0.1)', text: '#94a3b8', glow: 'rgba(148, 163, 184, 0.3)' },
+        government: { gradient: 'from-slate-500 to-gray-600', bgLight: 'rgba(100, 116, 139, 0.1)', text: '#64748b', glow: 'rgba(100, 116, 139, 0.3)' },
+        telecommunications: { gradient: 'from-indigo-500 to-blue-600', bgLight: 'rgba(99, 102, 241, 0.1)', text: '#6366f1', glow: 'rgba(99, 102, 241, 0.3)' },
+        energy: { gradient: 'from-yellow-500 to-orange-600', bgLight: 'rgba(234, 179, 8, 0.1)', text: '#eab308', glow: 'rgba(234, 179, 8, 0.3)' },
+        logistics: { gradient: 'from-sky-500 to-blue-600', bgLight: 'rgba(14, 165, 233, 0.1)', text: '#0ea5e9', glow: 'rgba(14, 165, 233, 0.3)' },
+        transportation: { gradient: 'from-teal-500 to-emerald-600', bgLight: 'rgba(20, 184, 166, 0.1)', text: '#14b8a6', glow: 'rgba(20, 184, 166, 0.3)' },
+        hospitality: { gradient: 'from-fuchsia-500 to-pink-600', bgLight: 'rgba(217, 70, 239, 0.1)', text: '#d946ef', glow: 'rgba(217, 70, 239, 0.3)' },
+        media: { gradient: 'from-red-500 to-orange-600', bgLight: 'rgba(239, 68, 68, 0.1)', text: '#ef4444', glow: 'rgba(239, 68, 68, 0.3)' },
+        insurance: { gradient: 'from-lime-500 to-green-600', bgLight: 'rgba(132, 204, 22, 0.1)', text: '#84cc16', glow: 'rgba(132, 204, 22, 0.3)' },
+        construction: { gradient: 'from-stone-500 to-neutral-600', bgLight: 'rgba(120, 113, 108, 0.1)', text: '#78716c', glow: 'rgba(120, 113, 108, 0.3)' },
+        agriculture: { gradient: 'from-green-600 to-lime-600', bgLight: 'rgba(22, 163, 74, 0.1)', text: '#16a34a', glow: 'rgba(22, 163, 74, 0.3)' },
+        realestate: { gradient: 'from-violet-500 to-purple-600', bgLight: 'rgba(124, 58, 237, 0.1)', text: '#7c3aed', glow: 'rgba(124, 58, 237, 0.3)' },
+        automotive: { gradient: 'from-zinc-500 to-slate-600', bgLight: 'rgba(113, 113, 122, 0.1)', text: '#71717a', glow: 'rgba(113, 113, 122, 0.3)' },
+        pharmaceutical: { gradient: 'from-pink-500 to-rose-600', bgLight: 'rgba(236, 72, 153, 0.1)', text: '#ec4899', glow: 'rgba(236, 72, 153, 0.3)' }
     };
 
-    // Helper function to generate consistent color from string hash for unknown categories
     const generateColorFromString = (str) => {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
@@ -187,20 +182,12 @@ const ClientsSection = ({ clients }) => {
         };
     };
 
-    // Helper to get config based on industry with dynamic color fallback
     const getIndustryConfig = (industry) => {
         if (!industry) return industryTypeConfig.technology;
         const lowerIndustry = industry.toLowerCase().replace(/\s+/g, '');
-        // Check for exact match first
-        if (industryTypeConfig[lowerIndustry]) {
-            return industryTypeConfig[lowerIndustry];
-        }
-        // Check for partial match
+        if (industryTypeConfig[lowerIndustry]) return industryTypeConfig[lowerIndustry];
         const matchKey = Object.keys(industryTypeConfig).find(key => lowerIndustry.includes(key));
-        if (matchKey) {
-            return industryTypeConfig[matchKey];
-        }
-        // Generate dynamic color for unknown categories
+        if (matchKey) return industryTypeConfig[matchKey];
         return generateColorFromString(lowerIndustry);
     };
 
@@ -212,15 +199,13 @@ const ClientsSection = ({ clients }) => {
                 Trusted by leading organizations across industries
             </p>
 
-            {/* Testimonials Carousel - Enhanced */}
             {clientsWithTestimonials.length > 0 && (
                 <div className="mb-16 relative">
-                        <div className="relative max-w-4xl mx-auto">
-                            {/* Decorative gradient orbs */}
-                            <div className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(255,45,45,0.1), transparent)' }}></div>
-                            <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(0,240,255,0.08), transparent)' }}></div>
+                    <div className="relative max-w-4xl mx-auto">
+                        <div className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(255,45,45,0.1), transparent)' }}></div>
+                        <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(0,240,255,0.08), transparent)' }}></div>
 
-                            <div className="relative rounded-xl p-8 md:p-12 glass-card">
+                        <div className="relative rounded-xl p-8 md:p-12 glass-card">
                             <FormatQuoteIcon
                                 sx={{
                                     fontSize: 100,
@@ -329,140 +314,26 @@ const ClientsSection = ({ clients }) => {
                 </div>
             )}
 
-            {/* Client Logos - Infinite Marquee */}
-            <div className="relative">
+            {/* Client Logos - Staggered Wrap Grid */}
+            <div className="relative max-w-6xl mx-auto px-4 mt-8">
                 <h3 className="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
                     Trusted By
                 </h3>
 
-                {/* Gradient Fade Edges */}
-                <div className="absolute left-0 top-8 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, var(--color-bg), transparent)' }}></div>
-                <div className="absolute right-0 top-8 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, var(--color-bg), transparent)' }}></div>
-
-                {/* Marquee Container */}
-                <div
-                    ref={marqueeRef}
-                    className="overflow-hidden"
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
-                >
-                    <div
-                        className={`flex gap-6 ${isPaused ? '' : 'animate-marquee'}`}
-                        style={{
-                            width: 'fit-content',
-                            animationPlayState: isPaused ? 'paused' : 'running',
-                        }}
-                    >
-                        {activeClients.map((client, index) => {
-                            const config = getIndustryConfig(client.industry);
-                            return (
-                                <Tooltip
-                                    key={`${client.id}-${index}`}
-                                    title={
-                                        <div className="p-2">
-                                            <div className="font-semibold mb-1">{client.name}</div>
-                                            {client.industry && (
-                                                <div className="text-sm mb-1">Industry: {client.industry}</div>
-                                            )}
-                                            {client.description && (
-                                                <div className="text-sm mb-2">{client.description}</div>
-                                            )}
-                                            {client.project_description && (
-                                                <div className="text-sm mb-2">
-                                                    <span className="font-semibold">Project:</span> {client.project_description}
-                                                </div>
-                                            )}
-                                            {client.collaboration_since && (
-                                                <div className="text-xs">Client since {client.collaboration_since}</div>
-                                            )}
-                                        </div>
-                                    }
-                                    arrow
-                                >
-                                    <div
-                                        className="flex-shrink-0 group cursor-pointer"
-                                        onClick={() => client.website_url && window.open(client.website_url, '_blank')}
-                                    >
-                                        <div
-                                            className="relative rounded-xl p-8 w-44 h-36 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 overflow-hidden glass-card"
-                                        >
-                                            {/* Top gradient bar based on industry type */}
-                                            <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
-
-                                            {/* Glow effect on hover */}
-                                            <div
-                                                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                                                style={{
-                                                    boxShadow: `0 0 30px ${config.glow}, inset 0 0 20px ${config.glow}`,
-                                                    borderRadius: '1rem',
-                                                }}
-                                            ></div>
-
-                                            {client.is_featured && (
-                                                <div className="absolute -top-2 -right-2 z-10">
-                                                    <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-full p-1.5 shadow-lg">
-                                                        <StarIcon sx={{ fontSize: 14, color: 'white' }} />
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {client.logo_url ? (
-                                                <img
-                                                    src={getImageUrl(client.logo_url)}
-                                                    alt={client.name}
-                                                    className="relative z-10 max-w-full max-h-14 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                                                />
-                                            ) : (
-                                                <div className="relative z-10 text-center">
-                                                    <div className="text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                                                        {client.name}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {client.industry && (
-                                                <Chip
-                                                    label={client.industry}
-                                                    size="small"
-                                                    sx={{
-                                                        mt: 2,
-                                                        fontSize: '0.65rem',
-                                                        height: '20px',
-                                                        textTransform: 'capitalize',
-                                                        backgroundColor: config.bgLight,
-                                                        color: config.text,
-                                                        fontWeight: 600,
-                                                        position: 'relative',
-                                                        zIndex: 10,
-                                                    }}
-                                                />
-                                            )}
-
-                                            {/* Shine effect on hover */}
-                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                                        </div>
-                                    </div>
-                                </Tooltip>
-                            );
-                        })}
-                    </div>
+                <div className="flex flex-wrap justify-center gap-6">
+                    {activeClients.map((client, index) => {
+                        const config = getIndustryConfig(client.industry);
+                        return (
+                            <ClientCard
+                                key={`${client.id}-${index}`}
+                                client={client}
+                                index={index}
+                                config={config}
+                            />
+                        );
+                    })}
                 </div>
             </div>
-
-            {/* CSS for marquee animation */}
-            <style>{`
-                @keyframes marquee {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        transform: translateX(-50%);
-                    }
-                }
-                .animate-marquee {
-                    animation: marquee ${activeClients.length * 3}s linear infinite;
-                }
-            `}</style>
         </section>
     );
 };

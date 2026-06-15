@@ -9,6 +9,8 @@ import { getImageUrl } from '@/utils/imageUtils';
 const HeroSection = ({ heroes }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const videoRef = useRef(null);
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
     const activeHeroes = heroes.filter(hero => hero.is_active);
 
     useEffect(() => {
@@ -29,6 +31,27 @@ const HeroSection = ({ heroes }) => {
         setCurrentSlide((prev) => (prev - 1 + activeHeroes.length) % activeHeroes.length);
     };
 
+    const handleTouchStart = (e) => {
+        touchStartX.current = e.targetTouches[0].clientX;
+        touchEndX.current = e.targetTouches[0].clientX;
+    };
+
+    const handleTouchMove = (e) => {
+        touchEndX.current = e.targetTouches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+        if (activeHeroes.length <= 1) return;
+        const swipeDistance = touchStartX.current - touchEndX.current;
+        const minSwipeDistance = 50; // minimum swipe distance in pixels
+
+        if (swipeDistance > minSwipeDistance) {
+            nextSlide();
+        } else if (swipeDistance < -minSwipeDistance) {
+            prevSlide();
+        }
+    };
+
     // Default hero if no active heroes
     const displayHeroes = activeHeroes.length > 0 ? activeHeroes : [{
         id: 'default',
@@ -44,7 +67,13 @@ const HeroSection = ({ heroes }) => {
     const hasImage = !!currentHero.image_url;
 
     return (
-        <section id="home" className="relative h-screen w-full overflow-hidden">
+        <section
+            id="home"
+            className="relative h-screen w-full overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+        >
             {/* Video Background — plays when no hero image */}
             {!hasImage && (
                 <video
@@ -218,6 +247,7 @@ const HeroSection = ({ heroes }) => {
                     <IconButton
                         onClick={prevSlide}
                         sx={{
+                            display: { xs: 'none', md: 'inline-flex' },
                             position: 'absolute',
                             left: { xs: 16, md: 32 },
                             top: '50%',
@@ -241,6 +271,7 @@ const HeroSection = ({ heroes }) => {
                     <IconButton
                         onClick={nextSlide}
                         sx={{
+                            display: { xs: 'none', md: 'inline-flex' },
                             position: 'absolute',
                             right: { xs: 16, md: 32 },
                             top: '50%',

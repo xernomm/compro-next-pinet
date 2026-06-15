@@ -52,9 +52,16 @@ export async function POST(request: NextRequest) {
       otp_expires_at: otpExpiresAt,
     });
 
-    // Send OTP to admin email(s)
-    const adminEmailsStr = process.env.ADMIN_OTP_EMAILS || user.email;
-    const adminEmails = adminEmailsStr.split(',').map((e: string) => e.trim()).filter(Boolean);
+    // Send OTP to the user's email, and also include any configured admin emails
+    const adminEmails = [user.email];
+    if (process.env.ADMIN_OTP_EMAILS) {
+      process.env.ADMIN_OTP_EMAILS.split(',').forEach((e: string) => {
+        const trimmed = e.trim();
+        if (trimmed && !adminEmails.includes(trimmed)) {
+          adminEmails.push(trimmed);
+        }
+      });
+    }
 
     const emailResult = await sendOTPEmail(adminEmails, otpCode, user.username);
 
