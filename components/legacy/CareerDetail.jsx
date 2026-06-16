@@ -110,7 +110,7 @@ const CareerDetail = ({ companyInfo, currentSlug }) => {
                 style={{ background: 'var(--color-bg-secondary)' }}
             >
                 {/* Canvas Grid Background Effect */}
-                <CanvasGridBackground solidColor="#121214" dotColor="#ff2d2d" boxSize={100} opacityClass="opacity-[0.35] dark:opacity-[0.45]" />
+                <CanvasGridBackground solidColor="#121214" dotColor="#ff2d2d" boxSize={180} opacityClass="opacity-[0.35] dark:opacity-[0.45]" />
 
                 {/* Gradient Orbs */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 dark:bg-white/5 rounded-full blur-3xl"></div>

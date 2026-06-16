@@ -9,7 +9,7 @@ const CanvasGridBackground = ({
     bgSelector,
     solidColor = 'transparent',
     dotColor = '#ff2d2d',
-    boxSize = 100,
+    boxSize = 180,
     opacityClass = 'opacity-[0.7] dark:opacity-[0.8]',
     blur = 0,
     darken = 0.4
@@ -30,7 +30,7 @@ const CanvasGridBackground = ({
         c.height = ch;
 
         const T = Math.PI * 2;
-        const m = { x: cw / 2, y: ch / 2, s: 1.5, x2: cw / 2, y2: ch / 2 };
+        const m = { x: -10000, y: -10000, s: 1.5, x2: -10000, y2: -10000 };
         
         const xTo = gsap.quickTo(m, "x", { duration: 1, ease: "expo" });
         const yTo = gsap.quickTo(m, "y", { duration: 1, ease: "expo" });
@@ -98,11 +98,6 @@ const CanvasGridBackground = ({
             let scaleFactor = box.s;
 
             if (currentSource && currentIsMediaReady) {
-                // Map canvas grid coordinate to media coordinates
-                const mediaW = currentSource.videoWidth || currentSource.naturalWidth || currentSource.width || 1920;
-                const mediaH = currentSource.videoHeight || currentSource.naturalHeight || currentSource.height || 1080;
-                calculateCoverCrop(mediaW, mediaH);
-
                 const mediaX = sx + (box.x / cw) * sw;
                 const mediaY = sy + (box.y / ch) * sh;
                 const cellW = (boxSize / cw) * sw;
@@ -270,6 +265,18 @@ const CanvasGridBackground = ({
             }
         };
 
+        const handlePointerLeave = () => {
+            m.x2 = -10000;
+            m.y2 = -10000;
+            xTo(m.x2);
+            yTo(m.y2);
+            
+            if (!isTicking) {
+                isTicking = true;
+                gsap.ticker.add(update);
+            }
+        };
+
         const handleResize = () => {
             cw = c.clientWidth || window.innerWidth;
             ch = c.clientHeight || window.innerHeight;
@@ -281,6 +288,7 @@ const CanvasGridBackground = ({
 
         window.addEventListener('resize', handleResize);
         window.addEventListener('pointermove', handlePointerMove);
+        c.addEventListener('pointerleave', handlePointerLeave);
 
         return () => {
             if (isTicking) {
@@ -288,6 +296,7 @@ const CanvasGridBackground = ({
             }
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('pointermove', handlePointerMove);
+            c.removeEventListener('pointerleave', handlePointerLeave);
             observer.disconnect();
         };
     }, [src, type, bgSelector, solidColor, dotColor, boxSize, blur, darken]);

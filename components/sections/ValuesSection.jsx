@@ -41,7 +41,7 @@ const ValuesSection = ({ values }) => {
             }}
         >
             {/* Video Background */}
-            <CanvasGridBackground bgSelector="#universal-bg-image" solidColor="transparent" dotColor="#ff2d2d" boxSize={100} blur={3} darken={0.4} />
+            <CanvasGridBackground src="/bg.jpg" type="image" solidColor="transparent" dotColor="#ff2d2d" boxSize={180} blur={5} darken={0.6} />
 
             {/* Grid background */}
             <div

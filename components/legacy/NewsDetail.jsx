@@ -92,7 +92,7 @@ const NewsDetail = ({ companyInfo, currentSlug }) => {
                         src={news.featured_image ? getImageUrl(allImages[activeImage] || news.featured_image) : null}
                         solidColor="#121214"
                         dotColor="#ff2d2d"
-                        boxSize={100}
+                        boxSize={180}
                         opacityClass="opacity-[0.35] dark:opacity-[0.45]"
                         blur={0}
                         darken={0.4}
