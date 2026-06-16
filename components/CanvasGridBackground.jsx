@@ -6,7 +6,8 @@ import gsap from 'gsap';
 const CanvasGridBackground = ({
     src,
     type,
-    solidColor = '#121214',
+    bgSelector,
+    solidColor = 'transparent',
     dotColor = '#ff2d2d',
     boxSize = 100,
     opacityClass = 'opacity-[0.7] dark:opacity-[0.8]',
@@ -54,6 +55,7 @@ const CanvasGridBackground = ({
 
         let mediaElement = null;
         let isImageLoaded = false;
+        let isTicking = false;
 
         // Cover crop math parameters
         let sx = 0, sy = 0, sw = cw, sh = ch;
@@ -75,32 +77,46 @@ const CanvasGridBackground = ({
             }
         };
 
+        let currentSource = null;
+        let currentIsMediaReady = false;
+
         const drawImg = (box) => {
             box.d = Math.hypot((box.x - m.x), (box.y - m.y));
-            // Maximum distance for clamping based on viewport size
-            const maxDistance = Math.hypot(cw, ch) || 1000;
-            box.s = 1 - gsap.utils.clamp(0, 1, box.d / maxDistance / m.s);
-            if (box.s < 0.001) return;
+            // Limit distance of influence (radius) to 300px around cursor for high performance
+            const maxDistance = 300;
+            box.s = 1 - gsap.utils.clamp(0, 1, box.d / maxDistance);
+            
+            if (box.s < 0.01) {
+                // Out of range: draw a static faint border and return!
+                // Skip all heavy drawing, calculations, and DOM lookups.
+                ctx.strokeStyle = `rgba(255, 255, 255, 0.04)`;
+                ctx.lineWidth = 0.5;
+                ctx.strokeRect(box.x, box.y, boxSize, boxSize);
+                return;
+            }
             
             let scaleFactor = box.s;
-            
-            const source = isVideo ? videoRef.current : mediaElement;
-            if (source && (isImageLoaded || isVideo)) {
+
+            if (currentSource && currentIsMediaReady) {
                 // Map canvas grid coordinate to media coordinates
+                const mediaW = currentSource.videoWidth || currentSource.naturalWidth || currentSource.width || 1920;
+                const mediaH = currentSource.videoHeight || currentSource.naturalHeight || currentSource.height || 1080;
+                calculateCoverCrop(mediaW, mediaH);
+
                 const mediaX = sx + (box.x / cw) * sw;
                 const mediaY = sy + (box.y / ch) * sh;
-                const mediaW = (boxSize / cw) * sw;
-                const mediaH = (boxSize / ch) * sh;
+                const cellW = (boxSize / cw) * sw;
+                const cellH = (boxSize / ch) * sh;
 
                 // Zoom in on the source rect based on pointer proximity (scaleFactor)
-                let zoomW = mediaW * (1 - scaleFactor);
-                let zoomH = mediaH * (1 - scaleFactor);
-                let zoomX = mediaX + (mediaW - zoomW) / 2;
-                let zoomY = mediaY + (mediaH - zoomH) / 2;
+                let zoomW = cellW * (1 - scaleFactor);
+                let zoomH = cellH * (1 - scaleFactor);
+                let zoomX = mediaX + (cellW - zoomW) / 2;
+                let zoomY = mediaY + (cellH - zoomH) / 2;
 
-                // Draw cropped video frame
+                // Draw cropped frame
                 if (blur > 0) ctx.filter = `blur(${blur}px)`;
-                ctx.drawImage(source, zoomX, zoomY, zoomW, zoomH, box.x, box.y, boxSize, boxSize);
+                ctx.drawImage(currentSource, zoomX, zoomY, zoomW, zoomH, box.x, box.y, boxSize, boxSize);
                 if (blur > 0) ctx.filter = 'none';
 
                 // Subtly darken non-hovered regions of the mosaic grid
@@ -110,10 +126,8 @@ const CanvasGridBackground = ({
                 }
             } else {
                 // Solid Mode fill
-                if (scaleFactor > 0.001) {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${0.03 * scaleFactor})`;
-                    ctx.fillRect(box.x, box.y, boxSize, boxSize);
-                }
+                ctx.fillStyle = `rgba(255, 255, 255, ${0.03 * scaleFactor})`;
+                ctx.fillRect(box.x, box.y, boxSize, boxSize);
             }
 
             // Draw thin cell border
@@ -123,6 +137,7 @@ const CanvasGridBackground = ({
         };
 
         const drawDots = (box) => {
+            if (box.s < 0.01) return; // Skip drawing dot entirely if it has 0 radius!
             ctx.fillStyle = dotColor;
             ctx.beginPath();
             ctx.arc(box.x, box.y, boxSize * 0.15 * box.s, 0, T);
@@ -134,53 +149,64 @@ const CanvasGridBackground = ({
             const d = Math.hypot((m.x - m.x2), (m.y - m.y2));
             sTo(d / maxDistance * 2);
 
+            // Resolve source element once per frame
+            if (bgSelector) {
+                currentSource = document.querySelector(bgSelector);
+                currentIsMediaReady = currentSource && (currentSource.tagName === 'VIDEO' ? currentSource.readyState >= 2 : currentSource.complete);
+            } else if (isVideo) {
+                currentSource = videoRef.current;
+                currentIsMediaReady = currentSource && currentSource.readyState >= 2;
+            } else if (isImage) {
+                currentSource = mediaElement;
+                currentIsMediaReady = isImageLoaded;
+            } else {
+                currentSource = null;
+                currentIsMediaReady = false;
+            }
+
             // Clean canvas
             ctx.clearRect(0, 0, cw, ch);
 
-            if (isVideo) {
-                const video = videoRef.current;
-                if (video && video.readyState >= 2) {
-                    calculateCoverCrop(video.videoWidth, video.videoHeight);
-                    
+            if (currentSource && currentIsMediaReady) {
+                const mediaW = currentSource.videoWidth || currentSource.naturalWidth || currentSource.width || 1920;
+                const mediaH = currentSource.videoHeight || currentSource.naturalHeight || currentSource.height || 1080;
+                calculateCoverCrop(mediaW, mediaH);
+
+                if (!bgSelector) {
                     // 1. Draw blurred & darkened background layer
                     if (blur > 0) ctx.filter = `blur(${blur}px)`;
-                    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
+                    ctx.drawImage(currentSource, sx, sy, sw, sh, 0, 0, cw, ch);
                     if (blur > 0) ctx.filter = 'none';
 
                     if (darken > 0) {
                         ctx.fillStyle = `rgba(0, 0, 0, ${darken})`;
                         ctx.fillRect(0, 0, cw, ch);
                     }
-
-                    // 2. Draw mosaic grid boxes on top
-                    boxes.forEach(drawImg);
                 }
-            } else if (isImage && mediaElement && isImageLoaded) {
-                calculateCoverCrop(mediaElement.width, mediaElement.height);
-
-                // 1. Draw blurred & darkened background layer
-                if (blur > 0) ctx.filter = `blur(${blur}px)`;
-                ctx.drawImage(mediaElement, sx, sy, sw, sh, 0, 0, cw, ch);
-                if (blur > 0) ctx.filter = 'none';
-
-                if (darken > 0) {
-                    ctx.fillStyle = `rgba(0, 0, 0, ${darken})`;
-                    ctx.fillRect(0, 0, cw, ch);
-                }
-
-                // 2. Draw mosaic grid boxes on top
-                boxes.forEach(drawImg);
             } else {
                 // Solid Mode (No background video/image)
                 ctx.fillStyle = solidColor;
                 ctx.fillRect(0, 0, cw, ch);
-
-                // Draw solid grid cells (only outlines and hover highlights)
-                boxes.forEach(drawImg);
             }
+
+            // 2. Draw mosaic grid boxes
+            boxes.forEach(drawImg);
 
             // Draw dots at the vertices
             boxes.forEach(drawDots);
+
+            // Check if we can pause the ticker
+            const dx = Math.abs(m.x - m.x2);
+            const dy = Math.abs(m.y - m.y2);
+            const isSourceVideo = currentSource && currentSource.tagName === 'VIDEO';
+
+            // Only tick continuously if the background is a playing video OR pointer is moving/GSAP is animating
+            const needsContinuousTick = isSourceVideo || dx > 0.1 || dy > 0.1;
+
+            if (!needsContinuousTick && isTicking) {
+                gsap.ticker.remove(update);
+                isTicking = false;
+            }
         };
 
         // Initialize Image source if image type
@@ -190,6 +216,7 @@ const CanvasGridBackground = ({
             mediaElement.onload = () => {
                 isImageLoaded = true;
                 setIsLoaded(true);
+                update();
             };
         }
 
@@ -198,15 +225,29 @@ const CanvasGridBackground = ({
             (entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        if (isVideo && videoRef.current) {
+                        if (!bgSelector && isVideo && videoRef.current) {
                             videoRef.current.play().catch(() => {});
                         }
-                        gsap.ticker.add(update);
+                        update();
+                        
+                        // Check if it's a video to start continuous ticking
+                        const source = bgSelector 
+                            ? document.querySelector(bgSelector)
+                            : (isVideo ? videoRef.current : mediaElement);
+                        const isSourceVideo = source && source.tagName === 'VIDEO';
+                        
+                        if (isSourceVideo && !isTicking) {
+                            isTicking = true;
+                            gsap.ticker.add(update);
+                        }
                     } else {
-                        if (isVideo && videoRef.current) {
+                        if (!bgSelector && isVideo && videoRef.current) {
                             videoRef.current.pause();
                         }
-                        gsap.ticker.remove(update);
+                        if (isTicking) {
+                            gsap.ticker.remove(update);
+                            isTicking = false;
+                        }
                     }
                 });
             },
@@ -222,6 +263,11 @@ const CanvasGridBackground = ({
             m.y2 = e.clientY - cRect.top;
             xTo(m.x2);
             yTo(m.y2);
+            
+            if (!isTicking) {
+                isTicking = true;
+                gsap.ticker.add(update);
+            }
         };
 
         const handleResize = () => {
@@ -230,24 +276,27 @@ const CanvasGridBackground = ({
             c.width = cw;
             c.height = ch;
             initBoxes();
+            update();
         };
 
         window.addEventListener('resize', handleResize);
         window.addEventListener('pointermove', handlePointerMove);
 
         return () => {
-            gsap.ticker.remove(update);
+            if (isTicking) {
+                gsap.ticker.remove(update);
+            }
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('pointermove', handlePointerMove);
             observer.disconnect();
         };
-    }, [src, type, solidColor, dotColor, boxSize, blur, darken]);
+    }, [src, type, bgSelector, solidColor, dotColor, boxSize, blur, darken]);
 
-    const isVideo = src && (type === 'video' || (!type && /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(src)));
+    const isVideoLocal = src && (type === 'video' || (!type && /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(src)));
 
     return (
         <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-            {isVideo && (
+            {isVideoLocal && !bgSelector && (
                 <video
                     ref={videoRef}
                     src={src}

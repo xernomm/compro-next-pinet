@@ -35,7 +35,7 @@ const NewsSection = ({ news }) => {
 
     if (publishedNews.length === 0) {
         return (
-            <section id="news" className="py-20 md:py-28 relative" style={{ background: 'var(--color-bg-secondary)' }}>
+            <section id="news" className="py-10 md:py-14 relative" style={{ background: 'var(--color-bg-secondary)' }}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <p className="mono-label text-center mb-3">{'// Stay Updated'}</p>
                     <h2 className="section-title">Latest News</h2>
@@ -49,7 +49,7 @@ const NewsSection = ({ news }) => {
     }
 
     return (
-        <section id="news" className="py-20 md:py-28 relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
+        <section id="news" className="py-10 md:py-14 relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <p className="mono-label text-center mb-3">{'// Stay Updated'}</p>
                 <h2 className="section-title">Latest News</h2>

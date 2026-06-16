@@ -150,12 +150,14 @@ const ClientsSection = ({ clients }) => {
 
     if (activeClients.length === 0) {
         return (
-            <section id="clients" className="section-container">
-                <h2 className="section-title">Our Clients</h2>
-                <p className="section-subtitle">
-                    Trusted by leading organizations across industries
-                </p>
-                <GridPlaceholder count={4} type="client" />
+            <section id="clients" className="w-full bg-white dark:bg-cyber-dark">
+                <div className="section-container">
+                    <h2 className="section-title">Our Clients</h2>
+                    <p className="section-subtitle">
+                        Trusted by leading organizations across industries
+                    </p>
+                    <GridPlaceholder count={4} type="client" />
+                </div>
             </section>
         );
     }
@@ -207,12 +209,13 @@ const ClientsSection = ({ clients }) => {
     };
 
     return (
-        <section id="clients" className="section-container overflow-hidden">
-            <p className="mono-label text-center mb-3">{'// Trust & Confidence'}</p>
-            <h2 className="section-title">Our Clients</h2>
-            <p className="section-subtitle">
-                Trusted by leading organizations across industries
-            </p>
+        <section id="clients" className="w-full bg-white dark:bg-cyber-dark overflow-hidden">
+            <div className="section-container">
+                <p className="mono-label text-center mb-3">{'// Trust & Confidence'}</p>
+                <h2 className="section-title">Our Clients</h2>
+                <p className="section-subtitle">
+                    Trusted by leading organizations across industries
+                </p>
 
             {clientsWithTestimonials.length > 0 && (
                 <div className="mb-16 relative">
@@ -365,6 +368,7 @@ const ClientsSection = ({ clients }) => {
                     scrollbar-width: none;
                 }
             `}</style>
+            </div>
         </section>
     );
 };

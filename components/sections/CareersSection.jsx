@@ -65,7 +65,7 @@ const CareersSection = ({ careers }) => {
     };
 
     return (
-        <section id="careers" className="py-20 md:py-28 relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
+        <section id="careers" className="py-10 md:py-14 relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <p className="mono-label text-center mb-3">{'// Careers'}</p>
             <h2 className="section-title">Join Our Team</h2>

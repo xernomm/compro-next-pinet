@@ -14,13 +14,15 @@ const ProductsSection = ({ products }) => {
 
     if (activeProducts.length === 0) {
         return (
-            <section id="products" className="section-container">
-                <p className="mono-label text-center mb-3">{'// Our Solutions'}</p>
-                <h2 className="section-title">Our Products</h2>
-                <p className="section-subtitle">
-                    Innovative solutions designed to drive your success
-                </p>
-                <GridPlaceholder count={3} type="default" />
+            <section id="products" className="w-full bg-white dark:bg-cyber-dark">
+                <div className="section-container">
+                    <p className="mono-label text-center mb-3">{'// Our Solutions'}</p>
+                    <h2 className="section-title">Our Products</h2>
+                    <p className="section-subtitle">
+                        Innovative solutions designed to drive your success
+                    </p>
+                    <GridPlaceholder count={3} type="default" />
+                </div>
             </section>
         );
     }
@@ -37,12 +39,13 @@ const ProductsSection = ({ products }) => {
     const displayProducts = [...featuredProducts, ...regularProducts];
 
     return (
-        <section id="products" className="section-container">
-            <p className="mono-label text-center mb-3">{'// Our Solutions'}</p>
-            <h2 className="section-title">Our Products</h2>
-            <p className="section-subtitle">
-                Innovative solutions designed to drive your success
-            </p>
+        <section id="products" className="w-full bg-white dark:bg-cyber-dark">
+            <div className="section-container">
+                <p className="mono-label text-center mb-3">{'// Our Solutions'}</p>
+                <h2 className="section-title">Our Products</h2>
+                <p className="section-subtitle">
+                    Innovative solutions designed to drive your success
+                </p>
 
             {/* Category Filter */}
             {categories.length > 1 && (
@@ -199,6 +202,7 @@ const ProductsSection = ({ products }) => {
                         </div>
                     </Link>
                 ))}
+            </div>
             </div>
         </section>
     );

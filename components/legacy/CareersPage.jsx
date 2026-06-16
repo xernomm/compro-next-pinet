@@ -124,7 +124,7 @@ const CareersPage = () => {
                 </section>
 
                 {/* Careers Content */}
-                <section className="section-container bg-white dark:bg-cyber-dark py-20">
+                <section className="section-container bg-white dark:bg-cyber-dark py-10">
                     {openJobs.length === 0 ? (
                         <div className="text-center">
                             <h2 className="section-title">No Open Positions</h2>

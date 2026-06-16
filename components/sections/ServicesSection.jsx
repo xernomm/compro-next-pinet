@@ -11,24 +11,27 @@ const ServicesSection = ({ services }) => {
 
     if (activeServices.length === 0) {
         return (
-            <section id="services" className="section-container">
-                <p className="mono-label text-center mb-3">{'// What We Do'}</p>
-                <h2 className="section-title">Our Services</h2>
-                <p className="section-subtitle">
-                    Comprehensive solutions tailored to meet your business needs
-                </p>
-                <GridPlaceholder count={3} type="default" />
+            <section id="services" className="w-full bg-white dark:bg-cyber-dark">
+                <div className="section-container">
+                    <p className="mono-label text-center mb-3">{'// What We Do'}</p>
+                    <h2 className="section-title">Our Services</h2>
+                    <p className="section-subtitle">
+                        Comprehensive solutions tailored to meet your business needs
+                    </p>
+                    <GridPlaceholder count={3} type="default" />
+                </div>
             </section>
         );
     }
 
     return (
-        <section id="services" className="section-container">
-            <p className="mono-label text-center mb-3">{'// What We Do'}</p>
-            <h2 className="section-title">Our Services</h2>
-            <p className="section-subtitle">
-                Comprehensive solutions tailored to meet your business needs
-            </p>
+        <section id="services" className="w-full bg-white dark:bg-cyber-dark">
+            <div className="section-container">
+                <p className="mono-label text-center mb-3">{'// What We Do'}</p>
+                <h2 className="section-title">Our Services</h2>
+                <p className="section-subtitle">
+                    Comprehensive solutions tailored to meet your business needs
+                </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {activeServices.map((service, index) => (
@@ -144,6 +147,7 @@ const ServicesSection = ({ services }) => {
                         </div>
                     </Link>
                 ))}
+            </div>
             </div>
         </section>
     );

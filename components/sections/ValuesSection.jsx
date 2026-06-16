@@ -34,14 +34,14 @@ const ValuesSection = ({ values }) => {
         <section
             id="values"
             ref={sectionRef}
-            className="py-20 md:py-28 relative overflow-hidden"
+            className="py-10 md:py-14 relative overflow-hidden"
             style={{
                 borderTop: '1px solid var(--color-border)',
                 borderBottom: '1px solid var(--color-border)',
             }}
         >
             {/* Video Background */}
-            <CanvasGridBackground src="/videos/cpu-animation.mp4" dotColor="#ff2d2d" boxSize={100} blur={3} darken={0.4} />
+            <CanvasGridBackground bgSelector="#universal-bg-image" solidColor="transparent" dotColor="#ff2d2d" boxSize={100} blur={3} darken={0.4} />
 
             {/* Grid background */}
             <div

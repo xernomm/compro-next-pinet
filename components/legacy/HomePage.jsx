@@ -150,6 +150,18 @@ const HomePage = () => {
         <>
             <Navbar companyInfo={data.companyInfo} />
 
+            {/* Universal Sticky Background Image */}
+            <div className="fixed inset-0 -z-10 w-full h-full overflow-hidden pointer-events-none">
+                <img
+                    id="universal-bg-image"
+                    src="/ambient.jpg"
+                    alt="Background"
+                    className="w-full h-full object-cover filter blur-[3px]"
+                />
+                {/* Darkening Overlay */}
+                <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+            </div>
+
             <main>
                 <HeroSection heroes={data.heroes} />
                 <AboutSection companyInfo={data.companyInfo} milestones={data.milestones} />

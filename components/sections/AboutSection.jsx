@@ -272,11 +272,11 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
             <section
                 id="about"
                 ref={sectionRef}
-                className="py-20 md:py-28 relative overflow-hidden"
+                className="py-10 md:py-14 relative overflow-hidden"
                 style={{ borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}
             >
                 {/* Video Background */}
-                <CanvasGridBackground src="/videos/matrix.mp4" dotColor="#ff2d2d" boxSize={100} blur={3} darken={0.4} />
+                <CanvasGridBackground bgSelector="#universal-bg-image" solidColor="transparent" dotColor="#ff2d2d" boxSize={100} blur={3} darken={0.4} />
 
                 {/* Grid Pattern */}
                 <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(rgba(255, 45, 45, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 45, 45, 0.03) 1px, transparent 1px)`, backgroundSize: '60px 60px', zIndex: 2 }} />
@@ -711,7 +711,7 @@ const AboutSection = ({ companyInfo, milestones = [] }) => {
                         <div className="absolute w-[400px] h-[400px] rounded-full" style={{ top: '60%', right: '-5%', background: 'radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%)' }} />
                     </div>
 
-                    <div className="relative z-10 pt-28 pb-28">
+                    <div className="relative z-10 pt-14 pb-14">
                         {/* Section Header */}
                         <div className="text-center mb-16 px-4">
                             <p className="mono-label mb-3">{'// Our Journey'}</p>

@@ -98,12 +98,14 @@ const PartnersSection = ({ partners }) => {
 
     if (activePartners.length === 0) {
         return (
-            <section id="partners" className="section-container bg-gray-50 dark:bg-dark-900">
-                <h2 className="section-title">Our Partners</h2>
-                <p className="section-subtitle">
-                    Collaborating with industry leaders to deliver excellence
-                </p>
-                <GridPlaceholder count={4} type="partner" />
+            <section id="partners" className="w-full bg-gray-50 dark:bg-dark-900">
+                <div className="section-container">
+                    <h2 className="section-title">Our Partners</h2>
+                    <p className="section-subtitle">
+                        Collaborating with industry leaders to deliver excellence
+                    </p>
+                    <GridPlaceholder count={4} type="partner" />
+                </div>
             </section>
         );
     }
@@ -153,7 +155,7 @@ const PartnersSection = ({ partners }) => {
     }, {});
 
     return (
-        <section id="partners" className="py-20 md:py-28 overflow-hidden relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
+        <section id="partners" className="py-10 md:py-14 overflow-hidden relative grid-bg" style={{ background: 'var(--color-bg-secondary)' }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-12">
                     <p className="mono-label mb-3">{'// Partnerships'}</p>

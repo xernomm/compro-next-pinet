@@ -131,12 +131,13 @@ const ContactSection = ({ companyInfo }) => {
     ].filter(c => c.value);
 
     return (
-        <section id="contact" className="section-container grid-bg">
-            <p className="mono-label text-center mb-3">{'// Get In Touch'}</p>
-            <h2 className="section-title">Contact Us</h2>
-            <p className="section-subtitle">
-                Have a question or want to work together? We&apos;d love to hear from you.
-            </p>
+        <section id="contact" className="w-full bg-white dark:bg-cyber-dark grid-bg">
+            <div className="section-container">
+                <p className="mono-label text-center mb-3">{'// Get In Touch'}</p>
+                <h2 className="section-title">Contact Us</h2>
+                <p className="section-subtitle">
+                    Have a question or want to work together? We&apos;d love to hear from you.
+                </p>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Contact Info Cards */}
@@ -287,6 +288,7 @@ const ContactSection = ({ companyInfo }) => {
                     {snackbar.message}
                 </Alert>
             </Snackbar>
+            </div>
         </section>
     );
 };

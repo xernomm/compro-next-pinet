@@ -19,13 +19,15 @@ const EventsSection = ({ events }) => {
 
     if (publishedEvents.length === 0) {
         return (
-            <section id="events" className="section-container">
-                <p className="mono-label text-center mb-3">{'// Join Us'}</p>
-                <h2 className="section-title">Upcoming Events</h2>
-                <p className="section-subtitle">
-                    Join us at our upcoming events and conferences
-                </p>
-                <GridPlaceholder count={3} type="event" />
+            <section id="events" className="w-full bg-white dark:bg-cyber-dark">
+                <div className="section-container">
+                    <p className="mono-label text-center mb-3">{'// Join Us'}</p>
+                    <h2 className="section-title">Upcoming Events</h2>
+                    <p className="section-subtitle">
+                        Join us at our upcoming events and conferences
+                    </p>
+                    <GridPlaceholder count={3} type="event" />
+                </div>
             </section>
         );
     }
@@ -61,23 +63,26 @@ const EventsSection = ({ events }) => {
 
     if (upcomingEvents.length === 0) {
         return (
-            <section id="events" className="section-container">
-                <p className="mono-label text-center mb-3">{'// Join Us'}</p>
-                <h2 className="section-title">Upcoming Events</h2>
-                <p className="section-subtitle">
-                    No upcoming events at the moment. Check back soon!
-                </p>
+            <section id="events" className="w-full bg-white dark:bg-cyber-dark">
+                <div className="section-container">
+                    <p className="mono-label text-center mb-3">{'// Join Us'}</p>
+                    <h2 className="section-title">Upcoming Events</h2>
+                    <p className="section-subtitle">
+                        No upcoming events at the moment. Check back soon!
+                    </p>
+                </div>
             </section>
         );
     }
 
     return (
-        <section id="events" className="section-container">
-            <p className="mono-label text-center mb-3">{'// Join Us'}</p>
-            <h2 className="section-title">Upcoming Events</h2>
-            <p className="section-subtitle">
-                Join us at our upcoming events and stay connected
-            </p>
+        <section id="events" className="w-full bg-white dark:bg-cyber-dark">
+            <div className="section-container">
+                <p className="mono-label text-center mb-3">{'// Join Us'}</p>
+                <h2 className="section-title">Upcoming Events</h2>
+                <p className="section-subtitle">
+                    Join us at our upcoming events and stay connected
+                </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {upcomingEvents.map((event, index) => {
@@ -256,6 +261,7 @@ const EventsSection = ({ events }) => {
                         </Link>
                     );
                 })}
+            </div>
             </div>
         </section>
     );
